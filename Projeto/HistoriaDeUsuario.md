@@ -1,7 +1,7 @@
 # Histórias de usuário 
 
 
-Cadastro de Aluno
+**Cadastro de Aluno**
    
 Como um aluno,
 Quero me cadastrar no sistema,
@@ -13,7 +13,7 @@ O aluno deve fornecer informações pessoais e criar um login e senha.
 O sistema deve validar a autenticidade das informações fornecidas.
 O aluno deve receber uma confirmação de que o cadastro foi realizado com sucesso.
 
-Matrícula em Disciplinas Obrigatórias
+**Matrícula em Disciplinas Obrigatórias**
 
 Como um aluno,
 Quero me matricular em até 4 disciplinas obrigatórias,
@@ -26,7 +26,7 @@ O sistema deve verificar se o aluno já está matriculado em 4 disciplinas obrig
 O sistema deve exibir a lista de disciplinas obrigatórias disponíveis e seu status (se a matrícula está aberta ou fechada).
 O aluno deve receber uma confirmação de matrícula bem-sucedida.
 
-Matrícula em Disciplinas Optativas
+**Matrícula em Disciplinas Optativas**
 
 Como um aluno,
 Quero me matricular em até 2 disciplinas optativas,
@@ -39,7 +39,7 @@ O sistema deve verificar se o aluno já está matriculado em 2 disciplinas optat
 O sistema deve exibir a lista de disciplinas optativas disponíveis e seu status (se a matrícula está aberta ou fechada).
 O aluno deve receber uma confirmação de matrícula bem-sucedida.
 
-Cancelamento de Matrícula
+**Cancelamento de Matrícula**
 
 Como um aluno,
 Quero cancelar uma ou mais matrículas,
@@ -51,7 +51,7 @@ O aluno pode cancelar matrículas em disciplinas até o final do período de mat
 O sistema deve atualizar a lista de disciplinas em que o aluno está matriculado e permitir a matrícula em outras disciplinas se houver vagas.
 O sistema deve notificar o aluno sobre a confirmação do cancelamento.
 
-Verificação de Vagas nas Disciplinas
+**Verificação de Vagas nas Disciplinas**
 
 Como um aluno,
 Quero verificar a disponibilidade de vagas nas disciplinas,
@@ -62,7 +62,7 @@ Critérios de Aceitação:
 O sistema deve exibir a quantidade atual de vagas disponíveis para cada disciplina.
 O sistema deve atualizar o status das disciplinas quando o número máximo de inscrições é atingido.
 
-Consulta de Disciplinas Ativas
+**Consulta de Disciplinas Ativas**
 
 Como um professor,
 Quero consultar a lista de alunos matriculados em minhas disciplinas,
@@ -72,7 +72,7 @@ Critérios de Aceitação:
 
 O professor deve acessar uma lista de disciplinas e ver os alunos matriculados em cada uma delas.
 
-Notificação ao Sistema de Cobranças
+**Notificação ao Sistema de Cobranças**
 
 Como um administrador do sistema,
 Quero notificar o sistema de cobranças sobre as disciplinas em que os alunos estão matriculados,
@@ -83,7 +83,7 @@ Critérios de Aceitação:
 O sistema de matrículas deve enviar uma notificação ao sistema de cobranças ao final do período de matrículas.
 A notificação deve incluir detalhes sobre as disciplinas em que os alunos estão matriculados e suas respectivas taxas.
 
-Gerenciamento de Acesso
+**Gerenciamento de Acesso**
 
 Como qualquer usuário do sistema,
 Quero fazer login com meu nome de usuário e senha,
