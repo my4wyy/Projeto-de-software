@@ -1,17 +1,29 @@
 # Histórias de usuário 
 
+**Gerar currículos**
 
-**Cadastro de Aluno**
-   
-Como um aluno,
-Quero me cadastrar no sistema,
-Para que eu possa acessar e gerenciar minha matrícula nas disciplinas.
+Como secretaria,
+Quero gerar currículos para os alunos,
+Para que eu possa fornecer um documento com as disciplinas que o aluno cursou e suas notas.
 
 Critérios de Aceitação:
 
-O aluno deve fornecer informações pessoais e criar um login e senha.
-O sistema deve validar a autenticidade das informações fornecidas.
-O aluno deve receber uma confirmação de que o cadastro foi realizado com sucesso.
+A secretaria deve poder gerar um currículo para cada aluno
+O currículo deve refletir as informações mais atualizadas do sistema de matrículas.
+A secretaria deve ter a capacidade de revisar e corrigir informações no currículo.
+
+**Cadastro**
+   
+Como secretaria,
+Quero cadastrar alunos, professores e disciplinas no sistema,
+Para que eu possa acessar e gerenciá-los.
+
+Critérios de Aceitação:
+
+A secretaria deve poder adicionar novos alunos ao sistema com informações como nome, matrícula, e curso.
+A secretaria deve poder adicionar novos professores ao sistema.
+A secretaria deve poder adicionar novas disciplinas ao sistema.
+O sistema deve fornecer uma interface de cadastro com campos apropriados para todas as informações necessárias.
 
 **Matrícula em Disciplinas Obrigatórias**
 
@@ -74,7 +86,7 @@ O professor deve acessar uma lista de disciplinas e ver os alunos matriculados e
 
 **Notificação ao Sistema de Cobranças**
 
-Como um administrador do sistema,
+Como secretaria,
 Quero notificar o sistema de cobranças sobre as disciplinas em que os alunos estão matriculados,
 Para que os alunos possam ser cobrados de acordo com as disciplinas selecionadas.
 
@@ -85,7 +97,7 @@ A notificação deve incluir detalhes sobre as disciplinas em que os alunos est�
 
 **Gerenciamento de Acesso**
 
-Como qualquer usuário do sistema,
+Como um usuário do sistema,
 Quero fazer login com meu nome de usuário e senha,
 Para que eu possa acessar minhas informações e funcionalidades do sistema de forma segura.
 
