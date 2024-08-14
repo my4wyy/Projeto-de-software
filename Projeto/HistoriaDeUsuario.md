@@ -12,7 +12,7 @@ A secretaria deve poder gerar um currículo para cada aluno
 O currículo deve refletir as informações mais atualizadas do sistema de matrículas.
 A secretaria deve ter a capacidade de revisar e corrigir informações no currículo.
 
-**CRUD de Alunos**
+**Gerenciar Alunos**
 
 Como secretaria,
 Quero gerenciar o cadastro de alunos no sistema,
@@ -26,7 +26,7 @@ Atualizar: A secretaria deve poder atualizar informações dos alunos, como curs
 Deletar: A secretaria deve poder remover alunos do sistema, garantindo que todas as informações relacionadas sejam devidamente excluídas.
 O sistema deve verificar se a matrícula do aluno já existe antes de concluir o cadastro.
 
-**CRUD de Professores**
+**Gerenciar Professores**
 
 Como secretaria,
 Quero gerenciar o cadastro de professores no sistema,
@@ -41,7 +41,7 @@ Deletar: A secretaria deve poder remover professores do sistema, garantindo que 
 O sistema deve verificar se a matrícula do professor já existe antes de concluir o cadastro.
 
 
-**CRUD de Disciplinas**
+**Gerenciar Disciplinas**
 
 Como secretaria,
 Quero gerenciar o cadastro de disciplinas no sistema,
@@ -55,33 +55,20 @@ Atualizar: A secretaria deve poder atualizar informações das disciplinas, como
 Deletar: A secretaria deve poder remover disciplinas do sistema, garantindo que todas as informações relacionadas sejam devidamente excluídas.
 O sistema deve verificar se o código da disciplina já existe antes de concluir o cadastro.
 
-**Matrícula em Disciplinas Obrigatórias**
+**Escolher Disciplinas**
 
 Como um aluno,
-Quero me matricular em até 4 disciplinas obrigatórias,
+Quero me matricular em até 4 disciplinas obrigatórias e 2 optativas,
 Para que eu possa cumprir com as exigências do meu curso.
 
 Critérios de Aceitação:
 
-O aluno pode selecionar até 4 disciplinas obrigatórias disponíveis para o semestre.
 O sistema deve verificar se o aluno já está matriculado em 4 disciplinas obrigatórias antes de permitir a matrícula em mais disciplinas.
-O sistema deve exibir a lista de disciplinas obrigatórias disponíveis e seu status (se a matrícula está aberta ou fechada).
+O sistema deve exibir a lista de disciplinas disponíveis e seu status (se a matrícula está aberta ou fechada).
 O aluno deve receber uma confirmação de matrícula bem-sucedida.
 
-**Matrícula em Disciplinas Optativas**
 
-Como um aluno,
-Quero me matricular em até 2 disciplinas optativas,
-Para que eu possa personalizar meu currículo conforme meus interesses.
-
-Critérios de Aceitação:
-
-O aluno pode selecionar até 2 disciplinas optativas disponíveis para o semestre.
-O sistema deve verificar se o aluno já está matriculado em 2 disciplinas optativas antes de permitir a matrícula em mais disciplinas.
-O sistema deve exibir a lista de disciplinas optativas disponíveis e seu status (se a matrícula está aberta ou fechada).
-O aluno deve receber uma confirmação de matrícula bem-sucedida.
-
-**Cancelamento de Matrícula**
+**Cancelar Matrícula na disciplina**
 
 Como um aluno,
 Quero cancelar uma ou mais matrículas,
@@ -93,7 +80,7 @@ O aluno pode cancelar matrículas em disciplinas até o final do período de mat
 O sistema deve atualizar a lista de disciplinas em que o aluno está matriculado e permitir a matrícula em outras disciplinas se houver vagas.
 O sistema deve notificar o aluno sobre a confirmação do cancelamento.
 
-**Verificação de Vagas nas Disciplinas**
+**Verificar Vagas nas Disciplinas**
 
 Como um aluno,
 Quero verificar a disponibilidade de vagas nas disciplinas,
@@ -104,7 +91,7 @@ Critérios de Aceitação:
 O sistema deve exibir a quantidade atual de vagas disponíveis para cada disciplina.
 O sistema deve atualizar o status das disciplinas quando o número máximo de inscrições é atingido.
 
-**Consulta de Disciplinas Ativas**
+**Consultar Alunos matriculados**
 
 Como um professor,
 Quero consultar a lista de alunos matriculados em minhas disciplinas,
@@ -114,7 +101,7 @@ Critérios de Aceitação:
 
 O professor deve acessar uma lista de disciplinas e ver os alunos matriculados em cada uma delas.
 
-**Notificação ao Sistema de Cobranças**
+**Notificar inscrição do aluno**
 
 Como secretaria,
 Quero notificar o sistema de cobranças sobre as disciplinas em que os alunos estão matriculados,
@@ -135,3 +122,47 @@ Critérios de Aceitação:
 
 O sistema deve autenticar o usuário com base no nome de usuário e senha.
 O sistema deve garantir que o acesso às informações seja restrito de acordo com o papel do usuário.
+
+**Encerrar Inscrições para Disciplinas**
+
+Como secretária,
+Quero encerrar as inscrições para disciplinas,
+Para que eu possa controlar o processo de matrícula e garantir que as inscrições sejam feitas dentro do prazo estabelecido.
+
+Critérios de Aceitação:
+
+A secretária deve poder encerrar inscrições para todas as disciplinas em um determinado semestre.
+O sistema deve impedir que novos alunos se matriculem nas disciplinas após o encerramento das inscrições.
+
+**Inscrever-se no Semestre**
+
+Como aluno,
+Quero me inscrever para o semestre,
+Para que eu possa começar a selecionar disciplinas e planejar meu cronograma acadêmico.
+
+Critérios de Aceitação:
+
+O aluno deve poder se inscrever para um novo semestre antes de escolher suas disciplinas.
+O sistema deve confirmar a inscrição do aluno para o semestre atual.
+
+**Cobrar Disciplinas do Semestre**
+
+Como representante do sistema de cobrança,
+Quero cobrar os alunos pelas disciplinas em que estão matriculados,
+Para que os alunos paguem as taxas de matrícula de acordo com suas seleções de disciplinas.
+
+Critérios de Aceitação:
+
+O sistema de cobrança deve receber notificações sobre as disciplinas em que cada aluno está matriculado.
+O sistema deve gerar faturas com base nas taxas associadas a cada disciplina.
+Os alunos devem ser notificados sobre suas faturas e datas de pagamento.
+
+**Acessar o Sistema**
+
+Como usuáriao,
+Quero acessar o sistema,
+Para que eu possa utilizar suas funcionalidades de acordo com minhas permissões.
+
+Critérios de Aceitação:
+
+O sistema deve permitir que o usuário acesse suas funcionalidades após autenticar com sucesso.
