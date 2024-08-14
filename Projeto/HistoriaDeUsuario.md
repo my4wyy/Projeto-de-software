@@ -12,18 +12,48 @@ A secretaria deve poder gerar um currículo para cada aluno
 O currículo deve refletir as informações mais atualizadas do sistema de matrículas.
 A secretaria deve ter a capacidade de revisar e corrigir informações no currículo.
 
-**Cadastro**
-   
+**CRUD de Alunos**
+
 Como secretaria,
-Quero cadastrar alunos, professores e disciplinas no sistema,
-Para que eu possa acessar e gerenciá-los.
+Quero gerenciar o cadastro de alunos no sistema,
+Para que eu possa acessar, atualizar e remover informações sobre os alunos conforme necessário.
 
 Critérios de Aceitação:
 
-A secretaria deve poder adicionar novos alunos ao sistema com informações como nome, matrícula, e curso.
-A secretaria deve poder adicionar novos professores ao sistema.
-A secretaria deve poder adicionar novas disciplinas ao sistema.
-O sistema deve fornecer uma interface de cadastro com campos apropriados para todas as informações necessárias.
+Criar: A secretaria deve poder adicionar novos alunos ao sistema com informações como nome, matrícula, curso, e informações de contato.
+Ler: A secretaria deve poder visualizar informações detalhadas dos alunos cadastrados no sistema.
+Atualizar: A secretaria deve poder atualizar informações dos alunos, como curso, dados de contato e status de matrícula.
+Deletar: A secretaria deve poder remover alunos do sistema, garantindo que todas as informações relacionadas sejam devidamente excluídas.
+O sistema deve verificar se a matrícula do aluno já existe antes de concluir o cadastro.
+
+**CRUD de Professores**
+
+Como secretaria,
+Quero gerenciar o cadastro de professores no sistema,
+Para que eu possa acessar, atualizar e remover informações sobre os docentes conforme necessário.
+
+Critérios de Aceitação:
+
+Criar: A secretaria deve poder adicionar novos professores ao sistema com informações como nome, matrícula, departamento e informações de contato.
+Ler: A secretaria deve poder visualizar informações detalhadas dos professores cadastrados no sistema.
+Atualizar: A secretaria deve poder atualizar informações dos professores, como departamento e dados de contato.
+Deletar: A secretaria deve poder remover professores do sistema, garantindo que todas as informações relacionadas sejam devidamente excluídas.
+O sistema deve verificar se a matrícula do professor já existe antes de concluir o cadastro.
+
+
+**CRUD de Disciplinas**
+
+Como secretaria,
+Quero gerenciar o cadastro de disciplinas no sistema,
+Para que eu possa acessar, atualizar e remover informações sobre as disciplinas conforme necessário.
+
+Critérios de Aceitação:
+
+Criar: A secretaria deve poder adicionar novas disciplinas ao sistema com informações como código da disciplina, nome, créditos e pré-requisitos.
+Ler: A secretaria deve poder visualizar informações detalhadas das disciplinas cadastradas no sistema.
+Atualizar: A secretaria deve poder atualizar informações das disciplinas, como nome, créditos e pré-requisitos.
+Deletar: A secretaria deve poder remover disciplinas do sistema, garantindo que todas as informações relacionadas sejam devidamente excluídas.
+O sistema deve verificar se o código da disciplina já existe antes de concluir o cadastro.
 
 **Matrícula em Disciplinas Obrigatórias**
 
