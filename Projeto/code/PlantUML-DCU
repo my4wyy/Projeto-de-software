@@ -5,27 +5,19 @@ note "Gerenciar = Criar, editar e apagar." as N2
 left to right direction
 
 :Representante do sistema de cobrança: as cobranca
-:Representante do sistema de matricula: as matricula
 :Secretária da universidade: as secretaria
 
-package "Autenticação" {
+package "Sistema" {
   (Fazer login)
   (Acessar o sistema)
-}
 
-package "Ações do Aluno" {
-  (Escolher disciplinas)
-  (Verificar vagas na disciplina)
   (Se inscrever para um semestre)
-  (Se matricular na disciplina)
+  (Se matricular nas disciplinas obrigatórias)
+  (Se matricular nas disciplinas optativas)
   (Cancelar matrícula na disciplina)
-}
 
-package "Ações do Professor" {
   (Consultar alunos matriculados)
-}
 
-package "Ações Administrativas" {
   (Gerenciar disciplinas)
   (Gerenciar professores)
   (Gerenciar alunos)
@@ -40,17 +32,17 @@ package "Ações Administrativas" {
 
 :Professor: --> (Consultar alunos matriculados)
 
-matricula --> (Notificar Inscrição de aluno)
+
 (Notificar Inscrição de aluno) --> cobranca
 cobranca --> (Cobrar disciplinas do semestre)
 (Cobrar disciplinas do semestre) --> :Aluno:
 
-:Aluno: --> (Escolher disciplinas)
-:Aluno: --> (Verificar vagas na disciplina)
+
 :Aluno: --> (Se inscrever para um semestre)
-:Aluno: --> (Se matricular na disciplina)
-:Aluno: --> (Cancelar matrícula na disciplina)
-(Cancelar matrícula na disciplina).> (Se matricular na disciplina) :Extends
+:Aluno: --> (Se matricular nas disciplinas obrigatórias)
+:Aluno: --> (Se matricular nas disciplinas optativas)
+
+(Cancelar matrícula na disciplina)<. (Se matricular nas disciplinas obrigatórias) :Extends
 (Se inscrever para um semestre).> (Notificar Inscrição de aluno) :Include
 (Notificar Inscrição de aluno) .> (Cobrar disciplinas do semestre) :Include
 secretaria --> (Gerenciar disciplinas)
