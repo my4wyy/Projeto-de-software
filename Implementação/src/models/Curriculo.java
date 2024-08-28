@@ -1,10 +1,19 @@
 package models;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 public class Curriculo {
     private Aluno aluno;
+    private List<Disciplina> disciplinasCursadas;
+    private Map<Disciplina, String> notas;
+
+    public Curriculo(Aluno aluno) {
+        this.aluno = aluno;
+        this.notas = new HashMap<>();
+    }
+
     public Aluno getAluno() {
         return aluno;
     }
@@ -13,21 +22,12 @@ public class Curriculo {
         this.aluno = aluno;
     }
 
-    private List<Disciplina> disciplinasCursadas;
     public List<Disciplina> getDisciplinasCursadas() {
         return disciplinasCursadas;
     }
 
     public void setDisciplinasCursadas(List<Disciplina> disciplinasCursadas) {
         this.disciplinasCursadas = disciplinasCursadas;
-    }
-
-    private Map<Disciplina, String> notas;
-
-    public Curriculo(Aluno aluno, List<Disciplina> disciplinasCursadas, Map<Disciplina, String> notas) {
-        this.aluno = aluno;
-        this.disciplinasCursadas = disciplinasCursadas;
-        this.notas = notas;
     }
 
     public Map<Disciplina, String> getNotas() {
@@ -39,5 +39,9 @@ public class Curriculo {
     }
 
     public void gerarCurriculo() {
+        System.out.println("Gerando currículo para o aluno " + aluno.getNome());
+        for (Disciplina disciplina : disciplinasCursadas) {
+            System.out.println("Disciplina: " + disciplina.getNome() + " - Nota: " + notas.get(disciplina));
+        }
     }
 }
