@@ -1,6 +1,5 @@
 @startuml
-
-note "Gerenciar = Criar, editar e apagar." as N2
+note "Gerenciar = Criar, visualizar, editar e apagar." as N2
 
 left to right direction
 
@@ -14,6 +13,7 @@ package "Sistema" {
   (Se inscrever para um semestre)
   (Se matricular nas disciplinas obrigatórias)
   (Se matricular nas disciplinas optativas)
+  (Se matricular nas disciplinas)
   (Cancelar matrícula na disciplina)
 
   (Consultar alunos matriculados)
@@ -41,10 +41,11 @@ cobranca --> (Cobrar disciplinas do semestre)
 :Aluno: --> (Se inscrever para um semestre)
 :Aluno: --> (Se matricular nas disciplinas obrigatórias)
 :Aluno: --> (Se matricular nas disciplinas optativas)
+:Aluno: --> (Se matricular nas disciplinas)
 
-(Cancelar matrícula na disciplina)<. (Se matricular nas disciplinas obrigatórias) :Extends
+(Cancelar matrícula na disciplina)<. (Se matricular nas disciplinas) :Extends
 (Se inscrever para um semestre).> (Notificar Inscrição de aluno) :Include
-(Notificar Inscrição de aluno) .> (Cobrar disciplinas do semestre) :Include
+
 secretaria --> (Gerenciar disciplinas)
 secretaria --> (Gerenciar professores)
 secretaria --> (Gerenciar alunos)
@@ -56,5 +57,4 @@ Usuário <|-- matricula
 Usuário <|-- secretaria
 Usuário <|-- Professor
 Usuário <|-- Aluno
-
 @enduml
