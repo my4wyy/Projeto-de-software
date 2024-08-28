@@ -23,7 +23,7 @@ class Aluno {
   - nome: String
   - matricula: String
   - curso: String
-  - disciplinasMatriculadas: List<Disciplina>
+  - matriculas: List<Matricula>
   + inscreverSemestre(): void
   + matricularDisciplina(disciplina: Disciplina): void
   + cancelarMatricula(disciplina: Disciplina): void
@@ -59,12 +59,18 @@ class Disciplina {
   - tipo: TipoDisciplina
   - preRequisitos: List<Disciplina>
   - vagasDisponiveis: int
-  - alunosMatriculados: List<Aluno>
-  - professorResponsavel: Professor
   + matricularAluno(aluno: Aluno): void
   + cancelarMatriculaAluno(aluno: Aluno): void
   + verificarVagas(): int
   + encerrarInscricoes(): void
+}
+
+class Matricula {
+  - aluno: Aluno
+  - disciplina: Disciplina
+  - dataMatricula: Date
+  + efetuarMatricula(): void
+  + cancelarMatricula(): void
 }
 
 class Curriculo {
@@ -78,7 +84,7 @@ Usuario <|-- Aluno
 Usuario <|-- Professor
 Usuario <|-- Administrador
 
-Aluno "1" --> "0..*" Disciplina
+Aluno "1" --> "0..*" Matricula
 Aluno "1" --> "1" Curriculo
 
 Professor "1" --> "0..*" Disciplina
@@ -92,7 +98,9 @@ Administrador "1" --> "0..*" Curriculo
 Curriculo "1" *-- "1" Aluno
 Curriculo "1" *-- "0..*" Disciplina
 
-Disciplina "0..*" --> "1" Aluno
-Disciplina "1" --> "1" Professor
+Disciplina "0..*" --> "0..*" Matricula
+
+Matricula "0..*" --> "1" Aluno
+Matricula "0..*" --> "1" Disciplina
 
 @enduml
