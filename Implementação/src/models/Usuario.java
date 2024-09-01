@@ -38,7 +38,7 @@ public class Usuario {
     }
 
     public boolean fazerLogin(String nomeUsuario, String senha) {
-        return false;
+        return this.nomeUsuario.equals(nomeUsuario) && this.senha.equals(senha);
     }
 
     public void acessarSistema() {
