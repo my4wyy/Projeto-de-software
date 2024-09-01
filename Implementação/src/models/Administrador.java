@@ -1,47 +1,50 @@
 package models;
 
+import java.io.Serializable;
+
 import enums.TipoUsuario;
 
-public abstract class Usuario {
-    private String nomeUsuario;
-    private String senha;
-    private TipoUsuario papel;
+public class Administrador extends Usuario implements Serializable {
+    private String nome;
+    private String matricula;
+    private String departamento;
 
-    public Usuario(String nomeUsuario, String senha, TipoUsuario papel) {
-        this.nomeUsuario = nomeUsuario;
-        this.senha = senha;
-        this.papel = papel;
+    public Administrador(String nomeUsuario, String senha, String nome, String matricula, String departamento) {
+        super(nomeUsuario, senha, TipoUsuario.ADMINISTRADOR);
+        this.nome = nome;
+        this.matricula = matricula;
+        this.departamento = departamento;
     }
 
-    public String getNomeUsuario() {
-        return nomeUsuario;
+    public void notificarInscricao(Aluno aluno) {
+        System.out.println("Notificação: Inscrição realizada com sucesso para " + aluno.getNome());
     }
 
-    public void setNomeUsuario(String nomeUsuario) {
-        this.nomeUsuario = nomeUsuario;
+    public void cobrarDisciplinas(Aluno aluno) {
+        System.out.println("Notificação: Cobrança enviada para " + aluno.getNome() + " referente às disciplinas matriculadas.");
     }
 
-    public String getSenha() {
-        return senha;
+    public String getNome() {
+        return nome;
     }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
-    public TipoUsuario getPapel() {
-        return papel;
+    public String getMatricula() {
+        return matricula;
     }
 
-    public void setPapel(TipoUsuario papel) {
-        this.papel = papel;
+    public void setMatricula(String matricula) {
+        this.matricula = matricula;
     }
 
-    public boolean fazerLogin(String nomeUsuario, String senha) {
-        return this.nomeUsuario.equals(nomeUsuario) && this.senha.equals(senha);
+    public String getDepartamento() {
+        return departamento;
     }
 
-    public void acessarSistema() {
-        System.out.println("Acessando o sistema...");
+    public void setDepartamento(String departamento) {
+        this.departamento = departamento;
     }
 }
