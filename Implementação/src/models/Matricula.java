@@ -1,8 +1,9 @@
 package models;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Matricula {
+public class Matricula implements Serializable{
     private Aluno aluno;
     private Disciplina disciplina;
     private Date dataMatricula;
