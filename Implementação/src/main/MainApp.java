@@ -20,7 +20,7 @@ public class MainApp {
             System.out.println("2. Sair");
             System.out.print("Escolha uma opção: ");
             int opcao = scanner.nextInt();
-            scanner.nextLine();
+            scanner.nextLine(); // Consumir a nova linha
 
             if (opcao == 1) {
                 login();
@@ -59,7 +59,7 @@ public class MainApp {
             System.out.println("6. Sair");
             System.out.print("Escolha uma opção: ");
             int opcao = scanner.nextInt();
-            scanner.nextLine();
+            scanner.nextLine(); // Consumir a nova linha
 
             switch (opcao) {
                 case 1:
@@ -78,7 +78,7 @@ public class MainApp {
                     aluno.gerarCurriculo();
                     break;
                 case 6:
-                    return;
+                    return; // Retorna ao menu principal
                 default:
                     System.out.println("Opção inválida.");
             }
