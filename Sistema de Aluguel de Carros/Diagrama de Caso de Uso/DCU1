@@ -1,0 +1,46 @@
+@startuml
+note "Gerenciar = Inserir, modificar, consultar e cancelar." as N2
+
+left to right direction
+
+package "Sistema" {
+  (Fazer cadastro)
+  (Fazer login)
+  (Acessar o sistema)
+
+  (Gerenciar pedido de aluguel)
+
+  (Modificar pedido de aluguel)
+  (Avaliar pedido de aluguel)
+
+  (Analisar financeiramente pedido de aluguel)
+  (Aprovar pedido)
+  (Reprovar pedido)
+  (Gerar contrato de aluguel)
+  (Registrar proprietário do automóvel)
+  (Associar aluguel à contrato de crédito)
+
+}
+
+Usuário <|-- Cliente
+Usuário <|-- Agente
+Agente <|-- Banco
+Agente <|-- Empresa
+
+:Usuário: --> (Fazer cadastro)
+:Usuário: --> (Fazer login)
+:Usuário: --> (Acessar o sistema)
+
+:Cliente: --> (Gerenciar pedido de aluguel)
+
+:Agente: --> (Modificar pedido de aluguel)
+:Agente: --> (Avaliar pedido de aluguel)
+:Banco: --> (Analisar financeiramente pedido de aluguel)
+
+:Agente: --> (Registrar proprietário do automóvel)
+:Banco: --> (Associar aluguel à contrato de crédito)
+
+(Analisar financeiramente pedido de aluguel)<. (Aprovar pedido) :Extends
+(Analisar financeiramente pedido de aluguel)<. (Reprovar pedido) :Extends
+(Aprovar pedido) .> (Gerar contrato de aluguel) :Include
+@enduml
