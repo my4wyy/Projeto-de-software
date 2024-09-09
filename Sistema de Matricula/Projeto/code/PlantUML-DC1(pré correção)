@@ -1,0 +1,98 @@
+@startuml
+
+enum TipoUsuario {
+  ALUNO
+  PROFESSOR
+  ADMINISTRADOR
+}
+
+enum TipoDisciplina {
+  OBRIGATORIA
+  OPTATIVA
+}
+
+class Usuario {
+  - nomeUsuario: String
+  - senha: String
+  - papel: TipoUsuario
+  + fazerLogin(nomeUsuario: String, senha: String): Boolean
+  + acessarSistema(): void
+}
+
+class Aluno {
+  - nome: String
+  - matricula: String
+  - curso: String
+  - disciplinasMatriculadas: List<Disciplina>
+  + inscreverSemestre(): void
+  + matricularDisciplina(disciplina: Disciplina): void
+  + cancelarMatricula(disciplina: Disciplina): void
+  + verificarVagas(disciplina: Disciplina): int
+  + gerarCurriculo(): Curriculo
+}
+
+class Professor {
+  - nome: String
+  - matricula: String
+  - departamento: String
+  - disciplinasEnsinadas: List<Disciplina>
+  + consultarAlunosMatriculados(disciplina: Disciplina): List<Aluno>
+}
+
+class Administrador {
+  - nome: String
+  - matricula: String
+  - departamento: String
+  + gerenciarAluno(aluno: Aluno): void
+  + gerenciarProfessor(professor: Professor): void
+  + gerenciarDisciplina(disciplina: Disciplina): void
+  + encerrarInscricoes(disciplina: Disciplina): void
+  + gerarCurriculo(aluno: Aluno): Curriculo
+  + notificarInscricao(aluno: Aluno): void
+  + cobrarDisciplinas(aluno: Aluno): void
+}
+
+class Disciplina {
+  - codigo: String
+  - nome: String
+  - creditos: int
+  - tipo: TipoDisciplina
+  - preRequisitos: List<Disciplina>
+  - vagasDisponiveis: int
+  - alunosMatriculados: List<Aluno>
+  - professorResponsavel: Professor
+  + matricularAluno(aluno: Aluno): void
+  + cancelarMatriculaAluno(aluno: Aluno): void
+  + verificarVagas(): int
+  + encerrarInscricoes(): void
+}
+
+class Curriculo {
+  - aluno: Aluno
+  - disciplinasCursadas: List<Disciplina>
+  - notas: Map<Disciplina, String>
+  + gerarCurriculo(): void
+}
+
+Usuario <|-- Aluno
+Usuario <|-- Professor
+Usuario <|-- Administrador
+
+Aluno "1" --> "0..*" Disciplina
+Aluno "1" --> "1" Curriculo
+
+Professor "1" --> "0..*" Disciplina
+Professor "1" --> "0..*" Aluno
+
+Administrador "1" --> "0..*" Aluno
+Administrador "1" --> "0..*" Professor
+Administrador "1" --> "0..*" Disciplina
+Administrador "1" --> "0..*" Curriculo
+
+Curriculo "1" *-- "1" Aluno
+Curriculo "1" *-- "0..*" Disciplina
+
+Disciplina "0..*" --> "1" Aluno
+Disciplina "1" --> "1" Professor
+
+@enduml
