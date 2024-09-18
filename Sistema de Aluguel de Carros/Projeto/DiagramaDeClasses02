@@ -12,6 +12,7 @@ class Cliente extends Usuario {
     - String rg
     - String cpf
     - String profissao
+    - List<Empregador> empregadores
     + fazerPedido()
     + cancelarPedido()
     + consultarPedido()
