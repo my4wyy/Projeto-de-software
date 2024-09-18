@@ -1,0 +1,78 @@
+@startuml
+class Usuario {
+    - String user
+    - String senha
+    + cadastrar()
+    + logar()
+}
+
+class Cliente extends Usuario {
+    - String nome
+    - String endereco
+    - String rg
+    - String cpf
+    - String profissao
+    + fazerPedido()
+    + cancelarPedido()
+    + consultarPedido()
+    + modificarPedido()
+}
+
+class Empregador {
+    - String nome
+    - String CNPJ
+    - Double rendimento
+}
+
+class Agente extends Usuario {
+    - String CNPJ
+    + avaliarPedido(Pedido pedido)
+    + modificarPedido(Pedido pedido)
+}
+
+class Empresa extends Agente {
+    + aprovarPedido()
+}
+
+class Banco extends Agente {
+    - String codigoBanco
+    + concederCredito(ContratoCredito contratoCredito)
+}
+
+class Automovel {
+    - String marca
+    - String modelo
+    - String ano
+    - String placa
+    - Cliente cliente
+    + alugar()
+}
+
+class Pedido {
+    - Date dataPedido
+    - String status
+    - Automovel automovel
+    + avaliarPedido()
+}
+
+class Contrato {
+    - Date dataInicio
+    - Date dataFim
+    - double valor
+    - String consideracoes
+    + registrarContrato()
+}
+
+class ContratoCredito {
+    - double valorCredito
+    + aprovarCredito()
+}
+
+Usuario "1" -- "0..*" Pedido
+Pedido "1" o-- "1" Automovel : contém
+Pedido "0..1" o-- "1" Contrato : gera
+Contrato "0..1" o-- "1" ContratoCredito : associado a
+Pedido "0..1" -- "1" Agente : é avaliado por
+Cliente "1" o-- "0..*" Empregador : trabalha em
+Automovel "1" -- "0..*" Contrato : pode ser propriedade de
+@enduml
