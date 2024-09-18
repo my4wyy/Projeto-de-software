@@ -1,6 +1,9 @@
 **Cadastro de Usuário**
+
 **Como:** usuário,
+
 **Quero:** realizar meu cadastro no sistema,
+
 **Para que:** eu possa criar uma conta e acessar as funcionalidades do sistema.
 
 **Critérios de Aceitação:**
@@ -10,8 +13,11 @@
 ---
 
 **Login no Sistema**
+
 **Como:** usuário,
+
 **Quero:** fazer login no sistema,
+
 **Para que:** eu possa acessar minha conta e acessar as funcionalidades do sistema.
 
 **Critérios de Aceitação:**
@@ -22,8 +28,11 @@
 ---
 
 **Acesso ao Sistema**
+
 **Como:** usuário,
+
 **Quero:** acessar as funcionalidades do sistema,
+
 **Para que:** eu possa acessar as funcionalidades do sistema.
 
 **Critérios de Aceitação:**
