@@ -2,10 +2,10 @@
 
 package "Model" {
     class Usuario {}
-    class Cliente extends Usuario {}
-    class Agente extends Usuario {}
-    class Empresa extends Agente {}
-    class Banco extends Agente {}
+    class Cliente {}
+    class Agente {}
+    class Empresa {}
+    class Banco {}
     class Automovel {}
     class Pedido {}
     class Contrato {}
@@ -17,21 +17,22 @@ package "Controller" {
     class PedidoController {}
     class ContratoController {}
     class UsuarioController {}
+    class ClienteController {}
+    class AgenteController {}
+    class AutomovelController {}
 }
 
-package "View" {}
+package "View" {
+   class "clientes/list"
+    class "clientes/form"
+    class "pedidos/list"
+    class "pedidos/form"
+    class "automoveis/list"
+}
 
-Pedido "1" o-- "1" Automovel 
-Pedido "0..1" o-- "1" Contrato 
-Contrato "0..1" o-- "1" ContratoCredito 
-Pedido "0..1" -- "1" Agente 
-Cliente "1" o-- "0..*" Empregador 
-Automovel "1" -- "0..*" Contrato 
-PedidoController .up.> Pedido 
-ContratoController ..> Contrato 
-UsuarioController ..> Usuario 
-PedidoController ..> View  
-ContratoController ..> View 
-UsuarioController ..> View
+
+    Controller ..> Model
+    Controller ..> View
+
 
 @enduml
