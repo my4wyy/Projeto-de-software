@@ -1,0 +1,37 @@
+@startuml
+skinparam packageStyle rectangle
+
+package "Gestão de Pedidos e Contratos" {
+    [Cadastro]
+    [Pedido]
+    [Contrato]
+    [ContratoCredito]
+}
+
+package "Construção Dinâmica de Páginas Web" {
+    [Usuario Web]
+    [Interface de Pedido]
+    [Interface de Contrato]
+}
+
+package "Banco de Dados" {
+    [Model]
+    [Controller]
+}
+
+[Cadastro] ..> [Model]
+[Pedido] ..> [Model]
+[Contrato] ..> [Model]
+
+[Controller] ..> [Model]
+
+[Interface de Pedido] --> [Pedido]
+[Interface de Contrato] --> [Contrato]
+[Contrato] --> [ContratoCredito]
+
+[Usuario Web] --> [Interface de Pedido]
+[Usuario Web] --> [Interface de Contrato]
+
+[Gestão de Pedidos e Contratos] -- [Construção Dinâmica de Páginas Web] : HTTP
+
+@enduml
