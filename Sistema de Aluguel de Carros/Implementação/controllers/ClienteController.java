@@ -1,7 +1,6 @@
 package br.com.demo.regescweb.controllers;
 
 import br.com.demo.regescweb.models.Cliente;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -24,7 +23,13 @@ public class ClienteController {
     @PostMapping
     @Transactional
     public Cliente salvarCliente(@RequestBody Cliente cliente) {
-        entityManager.persist(cliente);
+        if (cliente.getId() == null) {
+            // Novo cliente, usar persist
+            entityManager.persist(cliente);
+        } else {
+            // Cliente existente, usar merge
+            entityManager.merge(cliente);
+        }
         return cliente;
     }
 
