@@ -1,14 +1,12 @@
 package br.com.demo.regescweb.controllers;
 
 import br.com.demo.regescweb.models.Cliente;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-import java.util.Optional;
 
 @Controller
 @RequestMapping("/clientes-web")
@@ -32,7 +30,13 @@ public class ClienteWebController {
     @PostMapping("/salvar")
     @Transactional
     public String salvarCliente(@ModelAttribute Cliente cliente) {
-        entityManager.persist(cliente);
+        if (cliente.getId() == null) {
+            // Novo cliente
+            entityManager.persist(cliente);
+        } else {
+            // Atualizar cliente existente
+            entityManager.merge(cliente);
+        }
         return "redirect:/clientes-web";
     }
 
