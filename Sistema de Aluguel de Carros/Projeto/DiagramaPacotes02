@@ -1,0 +1,38 @@
+@startuml
+
+package "Model" {
+    class Usuario {}
+    class Cliente {}
+    class Agente {}
+    class Empresa {}
+    class Banco {}
+    class Automovel {}
+    class Pedido {}
+    class Contrato {}
+    class ContratoCredito {}
+    class Empregador {}
+}
+
+package "Controller" {
+    class PedidoController {}
+    class ContratoController {}
+    class UsuarioController {}
+    class ClienteController {}
+    class AgenteController {}
+    class AutomovelController {}
+}
+
+package "View" {
+   class "clientes"
+   
+    class "pedidos"
+    
+    class "automoveis"
+}
+
+
+    Controller ..> Model
+    Controller ..> View
+
+
+@enduml
