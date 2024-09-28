@@ -16,6 +16,7 @@ public class ClienteController {
     private EntityManager entityManager;
 
     @GetMapping
+    @Transactional // Removido o atributo readOnly
     public List<Cliente> listarClientes() {
         return entityManager.createQuery("SELECT c FROM Cliente c", Cliente.class).getResultList();
     }
@@ -34,6 +35,7 @@ public class ClienteController {
     }
 
     @GetMapping("/{id}")
+    @Transactional // Removido o atributo readOnly
     public Optional<Cliente> verCliente(@PathVariable Long id) {
         Cliente cliente = entityManager.find(Cliente.class, id);
         return Optional.ofNullable(cliente);
