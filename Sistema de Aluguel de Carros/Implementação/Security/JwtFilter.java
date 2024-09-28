@@ -43,7 +43,7 @@ protected void doFilterInternal(HttpServletRequest request, HttpServletResponse 
     
 
     String authorizationHeader = request.getHeader("Authorization");
-    System.out.println("Authorization Header: " + authorizationHeader); // Mover aqui para registrar o cabeçalho
+    System.out.println("Authorization Header: " + authorizationHeader); 
 
     if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
         String jwt = authorizationHeader.substring(7);

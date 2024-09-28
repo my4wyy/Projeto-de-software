@@ -5,8 +5,11 @@ import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
 import io.swagger.v3.oas.models.security.SecurityRequirement;
 import io.swagger.v3.oas.models.security.SecurityScheme;
+import io.swagger.v3.oas.models.Operation; 
+import org.springdoc.core.customizers.OperationCustomizer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.method.HandlerMethod;
 
 @Configuration
 public class SwaggerConfig {
@@ -21,5 +24,17 @@ public class SwaggerConfig {
             .components(new Components()
             .addSecuritySchemes("BearerAuth",
                 new SecurityScheme().type(SecurityScheme.Type.HTTP).scheme("bearer").bearerFormat("JWT")));
+    }
+
+    @Bean
+    public OperationCustomizer customGlobalHeader() {
+        return (Operation operation, HandlerMethod handlerMethod) -> {
+            if (operation.getTags() != null && operation.getTags().contains("Pedido")) {
+             
+                operation.getParameters().removeIf(param -> 
+                    param.getName().equalsIgnoreCase("Authorization"));
+            }
+            return operation;
+        };
     }
 }
