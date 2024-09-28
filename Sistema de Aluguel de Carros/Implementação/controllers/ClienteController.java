@@ -16,7 +16,7 @@ public class ClienteController {
     private EntityManager entityManager;
 
     @GetMapping
-    @Transactional // Removido o atributo readOnly
+    @Transactional
     public List<Cliente> listarClientes() {
         return entityManager.createQuery("SELECT c FROM Cliente c", Cliente.class).getResultList();
     }
@@ -25,17 +25,15 @@ public class ClienteController {
     @Transactional
     public Cliente salvarCliente(@RequestBody Cliente cliente) {
         if (cliente.getId() == null) {
-            // Novo cliente, usar persist
             entityManager.persist(cliente);
         } else {
-            // Cliente existente, usar merge
             entityManager.merge(cliente);
         }
         return cliente;
     }
 
     @GetMapping("/{id}")
-    @Transactional // Removido o atributo readOnly
+    @Transactional 
     public Optional<Cliente> verCliente(@PathVariable Long id) {
         Cliente cliente = entityManager.find(Cliente.class, id);
         return Optional.ofNullable(cliente);
