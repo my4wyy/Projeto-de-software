@@ -1,15 +1,12 @@
 package br.com.demo.regescweb.models;
 
+import javax.persistence.*;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.Column;
-import javax.persistence.ElementCollection;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
 
 @Entity
-public class Cliente {
+public class Cliente extends Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,18 +22,20 @@ public class Cliente {
     private String nome;
 
     @Column(nullable = false)
-    private String endereco;
+    private String endereco; 
 
     private String profissao;
 
-    @ElementCollection
-    private List<String> entidadesEmpregadoras;
+    @ElementCollection(fetch = FetchType.EAGER) // Mudei para EAGER
+    @CollectionTable(name = "empregadores", joinColumns = @JoinColumn(name = "cliente_id"))
+    @Column(name = "entidade_empregadora")
+    @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
+    private List<String> entidadesEmpregadoras = new ArrayList<>();
 
-    @ElementCollection
-    private List<Double> rendimentos;
+    // Campo para armazenar o token
+    private String token;
 
     // Getters e Setters
-
     public Long getId() {
         return id;
     }
@@ -90,14 +89,26 @@ public class Cliente {
     }
 
     public void setEntidadesEmpregadoras(List<String> entidadesEmpregadoras) {
-        this.entidadesEmpregadoras = entidadesEmpregadoras;
+        if (entidadesEmpregadoras.size() <= 3) {
+            this.entidadesEmpregadoras = entidadesEmpregadoras;
+        } else {
+            throw new IllegalArgumentException("O número de empregadores não pode exceder 3.");
+        }
     }
 
-    public List<Double> getRendimentos() {
-        return rendimentos;
+    public void adicionarEmpregador(String empregador) {
+        if (entidadesEmpregadoras.size() < 3) {
+            entidadesEmpregadoras.add(empregador);
+        } else {
+            throw new IllegalStateException("Não é possível adicionar mais empregadores. Limite de 3 atingido.");
+        }
     }
 
-    public void setRendimentos(List<Double> rendimentos) {
-        this.rendimentos = rendimentos;
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 }
