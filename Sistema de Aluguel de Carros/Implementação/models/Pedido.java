@@ -60,4 +60,11 @@ public class Pedido {
     public void setStatus(StatusPedido status) {
         this.status = status;
     }
+    
+    public void avaliarPedido(Cliente cliente) {
+        if (automovel != null) {
+            automovel.alugar(cliente); 
+            this.status = StatusPedido.APROVADO; 
+    }
+}
 }

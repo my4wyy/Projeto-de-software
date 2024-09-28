@@ -46,5 +46,5 @@ public class Token {
         this.token = token;
     }
 
-    // Getters e Setters
+    
 }

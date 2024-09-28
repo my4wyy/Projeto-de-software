@@ -32,10 +32,8 @@ public class Cliente extends Usuario {
     @JsonIgnoreProperties({"hibernateLazyInitializer", "handler"})
     private List<String> entidadesEmpregadoras = new ArrayList<>();
 
-    // Campo para armazenar o token
     private String token;
 
-    // Getters e Setters
     public Long getId() {
         return id;
     }

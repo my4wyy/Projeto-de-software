@@ -1,22 +1,14 @@
 package br.com.demo.regescweb.models;
 
-import javax.persistence.*;
-
-@Entity
-public class Automovel {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+public class AutomovelRequest {
     private Long id;
-    
     private String marca;
     private String modelo;
     private String ano;
     private String placa;
+    private Long clienteId; 
 
-    @ManyToOne
-    private Cliente cliente; 
-
+    // Getters e Setters
     public Long getId() {
         return id;
     }
@@ -57,18 +49,11 @@ public class Automovel {
         this.placa = placa;
     }
 
-    public Cliente getCliente() {
-        return cliente;
+    public Long getClienteId() {
+        return clienteId;
     }
 
-    public void setCliente(Cliente cliente) {
-        this.cliente = cliente;
-    }
-
-    public void alugar(Cliente cliente) {
-        if (this.cliente != null) {
-            throw new IllegalStateException("Este automóvel já está alugado.");
-        }
-        this.cliente = cliente; 
+    public void setClienteId(Long clienteId) {
+        this.clienteId = clienteId;
     }
 }
