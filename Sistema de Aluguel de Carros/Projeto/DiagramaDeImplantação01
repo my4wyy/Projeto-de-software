@@ -1,0 +1,48 @@
+@startuml
+node "Cliente" {
+    [Navegador Web]
+}
+
+node "Servidor Web" {
+    component "Aplicação Web" {
+        [Cadastro Web]
+        [Pedido Web]
+        [Contrato Web]
+    }
+}
+
+node "Servidor de Aplicação" {
+    component "Lógica de Negócio" {
+        [Pedido Controller]
+        [Contrato Controller]
+        [Usuario Controller]
+        [Cliente Controller]
+        [Agente Controller]
+    }
+}
+
+node "Servidor de Banco de Dados" {
+    database "Banco de Dados" {
+        [Model] 
+        [Cadastro Dados]
+        [Contrato Dados]
+        [Pedido Dados]
+    }
+}
+
+[Navegador Web] --> [Cadastro Web] : HTTP/HTTPS
+[Navegador Web] --> [Pedido Web] : HTTP/HTTPS
+[Navegador Web] --> [Contrato Web] : HTTP/HTTPS
+
+[Cadastro Web] --> [Pedido Controller] : REST API (JSON)
+[Pedido Web] --> [Pedido Controller] : REST API (JSON)
+[Contrato Web] --> [Contrato Controller] : REST API (JSON)
+
+[Pedido Controller] --> [Pedido Dados] : JDBC/SQL
+[Contrato Controller] --> [Contrato Dados] : JDBC/SQL
+[Usuario Controller] --> [Cadastro Dados] : JDBC/SQL
+
+[Pedido Controller] --> [Model] : JDBC/SQL
+[Contrato Controller] --> [Model] : JDBC/SQL
+[Agente Controller] --> [Model] : JDBC/SQL
+@enduml
