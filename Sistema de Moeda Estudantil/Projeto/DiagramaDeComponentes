@@ -1,0 +1,32 @@
+@startuml
+skinparam packageStyle rectangle
+
+package "Gestão de Mérito" {
+    [Cadastro e Autenticação]
+    [Gestão de Moedas e Transações]
+    [Resgate de Vantagens]
+    [Notificações]
+}
+
+package "Construção Dinâmica de Páginas Web" {
+    [Interface de Usuário]
+}
+
+database "Banco de Dados" {
+}
+
+[Cadastro e Autenticação] ..> "Banco de Dados"
+[Gestão de Moedas e Transações] ..> "Banco de Dados"
+[Resgate de Vantagens] ..> "Banco de Dados"
+[Notificações] ..> "Banco de Dados"
+
+[Interface de Usuário] ..> [Cadastro e Autenticação]
+[Interface de Usuário] ..> [Gestão de Moedas e Transações]
+[Interface de Usuário] ..> [Resgate de Vantagens]
+
+[Gestão de Moedas e Transações] --> [Notificações]
+[Resgate de Vantagens] --> [Notificações]
+
+[Gestão de Mérito] -- [Construção Dinâmica de Páginas Web] : HTTP
+
+@enduml
