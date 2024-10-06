@@ -1,5 +1,5 @@
 @startuml
-class Autenticacao {
+class Usuario {
   - nome: String
   - endereco: String
   - login: String
@@ -7,7 +7,7 @@ class Autenticacao {
   + realizarLogin(login: String, senha: String)
 }
 
-class Usuario {
+class Pessoa {
   - cpf: String
   - conta: Conta
   - instituicao: Instituicao
@@ -30,7 +30,7 @@ class Professor {
 }
 
 class Instituicao {
-
+  - listaInstituicoes: List<Instituicao>
 }
 
 class EmpresaParceira {
@@ -70,21 +70,20 @@ class Conta {
   + consultarExtrato(): List<Transacao>
 }
 
-Usuario <|-- Aluno
-Usuario <|-- Professor
-Autenticacao <|-- Usuario
-Autenticacao <|-- EmpresaParceira
+Pessoa <|-left- Aluno
+Pessoa <|-right- Professor
+Usuario <|-up- Pessoa
+Usuario <|-down- EmpresaParceira
 
-Aluno --> Instituicao 
-Professor --> Instituicao
-Usuario --> Conta
-EmpresaParceira --> Vantagem
-Aluno --> Vantagem 
-Conta --> Transacao
-Professor --> Aluno
-(Professor, Aluno) -- Transacao
-Transacao --> EmpresaParceira
-Vantagem --> Conta 
-Vantagem --> EmpresaParceira 
-Vantagem --> Aluno
+Aluno "1" -- "1..*" Instituicao 
+Professor "1" -- "1" Instituicao 
+Usuario "1" -- "1" Conta 
+Aluno "0..*" -- "1" Vantagem 
+Conta "1" -down- "0..*" Transacao 
+Professor "1" -- "0..*" Aluno 
+Transacao "0..*" -- "1" Professor 
+Transacao "0..*" -- "1" Aluno 
+Transacao "0..*" -- "0..1" EmpresaParceira 
+Vantagem "1" -- "1" EmpresaParceira
+Vantagem "0..*" -- "0..1" Conta
 @enduml
