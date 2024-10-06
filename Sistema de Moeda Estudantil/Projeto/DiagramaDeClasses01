@@ -1,0 +1,90 @@
+@startuml
+class Autenticacao {
+  - nome: String
+  - endereco: String
+  - login: String
+  - senha: String
+  + realizarLogin(login: String, senha: String)
+}
+
+class Usuario {
+  - cpf: String
+  - conta: Conta
+  - instituicao: Instituicao
+}
+
+class Aluno {
+  - email: String
+  - rg: String
+  - endereco: String
+  - curso: String
+  - listaInstituicoes: List<Instituicao>
+  + realizarCadastro()
+  + trocarMoedas(vantagem: Vantagem)
+  + escolherInstituicao(listaInstituicoes: List<Instituicao>)
+}
+
+class Professor {
+  - departamento: String
+  + enviarMoedas(aluno: Aluno, quantidade: int, motivo: String)
+}
+
+class Instituicao {
+
+}
+
+class EmpresaParceira {
+  - nome: String
+  - email: String
+  - vantagens: List<Vantagem>
+  + cadastrarVantagem(descricao: String, foto: String, custo: int)
+}
+
+class Vantagem {
+  - descricao: String
+  - foto: String
+  - custo: int
+  - empresaParceira: EmpresaParceira
+  + gerarCodigo(): String
+  + enviarEmailCupom(aluno: Aluno, codigo: String)
+  + enviarEmailParceiro(parceiro: EmpresaParceira, codigo: String)
+}
+
+class Transacao {
+  - id: String
+  - data: Date
+  - tipo: String
+  - quantidade: int
+  - descricao: String
+  - valor: int
+  - origem: Professor
+  - destino: Aluno
+  + registrarTransacao()
+  + notificarAluno()
+}
+
+class Conta {
+  - saldo: int
+  - historicoTransacoes: List<Transacao>
+  + consultarSaldo(): int
+  + consultarExtrato(): List<Transacao>
+}
+
+Usuario <|-- Aluno
+Usuario <|-- Professor
+Autenticacao <|-- Usuario
+Autenticacao <|-- EmpresaParceira
+
+Aluno --> Instituicao 
+Professor --> Instituicao
+Usuario --> Conta
+EmpresaParceira --> Vantagem
+Aluno --> Vantagem 
+Conta --> Transacao
+Professor --> Aluno
+(Professor, Aluno) -- Transacao
+Transacao --> EmpresaParceira
+Vantagem --> Conta 
+Vantagem --> EmpresaParceira 
+Vantagem --> Aluno
+@enduml
