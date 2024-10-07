@@ -24,9 +24,8 @@ database "Banco de Dados" {
 [Interface de Usuário] ..> [Gestão de Moedas e Transações]
 [Interface de Usuário] ..> [Resgate de Vantagens]
 
-[Gestão de Moedas e Transações] --> [Notificações]
-[Resgate de Vantagens] --> [Notificações]
+[Gestão de Moedas e Transações] ..> [Notificações]
+[Resgate de Vantagens] ..> [Notificações]
 
-[Gestão de Mérito] -- [Construção Dinâmica de Páginas Web] : HTTP
 
 @enduml
