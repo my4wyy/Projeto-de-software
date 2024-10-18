@@ -1,0 +1,37 @@
+@startuml
+left to right direction
+actor Usuário
+actor Aluno
+actor Professor
+actor EmpresaParceira
+
+Usuário <|-- Aluno
+Usuário <|-- Professor
+Usuário <|-- EmpresaParceira
+
+rectangle "Sistema" {
+  Aluno --> (Cadastro no Sistema)
+  Aluno --> (Selecionar Instituição de Ensino)
+  Aluno --> (Receber Moedas)
+  Aluno --> (Consultar Extrato)
+  Aluno --> (Trocar Moedas por Vantagem)
+
+  Professor --> (Enviar Moedas ao Aluno)
+  Professor --> (Ver Extrato)
+  Professor --> (Receber Mil Moedas Semestrais)
+
+  EmpresaParceira --> (Cadastrar Informações da Empresa)
+  EmpresaParceira --> (Cadastrar Vantagem)
+  EmpresaParceira --> (Receber Notificação de Troca)
+  EmpresaParceira --> (Realizar Troca)
+
+  (Usuário) --> (Login no Sistema)
+
+  (Enviar Moedas ao Aluno) .> (Ver Extrato) : <<include>>
+  (Enviar Moedas ao Aluno) .> (Inserir Mensagem de Reconhecimento) : <<include>>
+  (Enviar Moedas ao Aluno) .> (Notificar Aluno) : <<include>>
+
+  (Trocar Moedas por Vantagem) .> (Receber Notificação de Troca) : <<include>>
+  (Trocar Moedas por Vantagem) .> (Enviar Notificação) : <<include>>
+}
+@enduml
