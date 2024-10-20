@@ -1,11 +1,9 @@
 @startuml
-node "Cliente" {
+node "Usuário" {
     [Navegador Web] .-> [Interface de Usuário] 
+    [Interface de Usuário] .-> [API REST]
 }
 
-node "Servidor Web" {
-    [Interface de Usuário] .-> [API REST] 
-}
 
 node "Servidor de Aplicações" {
     [API REST] .-> [Gestão de Moedas e Transações] 
@@ -24,7 +22,6 @@ node "Servidor de Banco de Dados" {
 [Resgate de Vantagens] .-> "Banco de Dados" 
 [Notificações] .-> "Banco de Dados" 
 
-[Cliente] --> [Servidor Web] : HTTPS
-[Servidor Web] --> [Servidor de Aplicações] : HTTP/HTTPS
-[Servidor de Aplicações] --> [Servidor de Banco de Dados] : SQL
+[Usuário] -- [Servidor de Aplicações] : HTTPS
+[Servidor de Aplicações] -- [Servidor de Banco de Dados] : SQL
 @enduml
