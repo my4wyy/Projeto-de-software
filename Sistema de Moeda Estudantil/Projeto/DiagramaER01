@@ -1,0 +1,64 @@
+@startuml
+entity "Usuário" {
+    + PK: id_usuario: String
+    + nome: String
+    + endereco: String
+    + email: String
+    + senha: String
+}
+
+entity "Pessoa" {
+    + PK: cpf: String
+}
+
+entity "Aluno" {
+    + PK: rg: String
+    + endereco: String
+    + curso: String
+    + FK: cpf: String
+}
+
+entity "Professor" {
+    + PK: id_professor: String
+    + departamento: String
+    + quantidade: int
+    + motivo: String
+    + FK: cpf: String
+}
+
+entity "Instituição" {
+    + PK: id_instituicao: String
+    + nome: String
+}
+
+entity "Empresa Parceira" {
+    + PK: id_empresa: String
+    + nome: String
+}
+
+entity "Vantagem" {
+    + PK: id_vantagem: String
+    + descricao: String
+    + foto: String
+    + custo: int
+    + FK: id_empresa: String
+}
+
+entity "Conta" {
+    + PK: id_conta: String
+    + saldo: int
+    + FK: cpf: String
+}
+
+entity "Transação" {
+    + PK: id_transacao: String
+    + data: Date
+    + tipo: String
+    + quantidade: int
+    + descricao: String
+    + valor: int
+    + FK: id_professor: String
+    + FK: rg_aluno: String
+    + FK: id_empresa: String
+}
+@enduml
