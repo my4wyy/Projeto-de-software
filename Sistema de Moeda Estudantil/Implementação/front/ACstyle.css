@@ -1,0 +1,65 @@
+html, body {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    display: flex;
+    flex-direction: column;
+    background: rgb(235,192,192);
+    background: linear-gradient(90deg, rgba(235,192,192,1) 37%, rgb(255, 0, 144) 87%);
+    font-family: 'Arial', sans-serif;
+}
+
+
+
+.footer-text {
+    margin: 0;
+    font-size: 14px;
+    color: #ffffff;
+}.container {
+    flex: 1;
+}
+
+.bold-title {
+    font-weight: bold;
+    font-size: 24px;
+    color: #333333;
+    margin-bottom: 20px;
+}
+
+.btn.btn-primary {
+    background-color: rgb(255, 0, 144);
+    color: white;
+    border: none;
+    border-radius: 0.25rem;
+    padding: 10px 20px;
+    transition: background-color 0.3s ease;
+}
+
+.btn.btn-primary:hover,
+.btn.btn-primary:focus,
+.btn.btn-primary:active {
+    background-color: rgb(255, 0, 144);
+    color: rgb(255, 255, 255);
+    border: none;
+    box-shadow: none;
+}
+
+.card-name {
+    background-color: rgb(255, 0, 144);
+    padding: 15px; 
+    border-radius: 15px; 
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    margin-bottom: 30px;
+    max-width: 500px; 
+    margin-left: auto;
+    margin-right: auto;
+}
+
+h2.text-center {
+    font-size: 2rem; 
+    color: white; 
+    text-align: center;
+    margin: 0; 
+}
