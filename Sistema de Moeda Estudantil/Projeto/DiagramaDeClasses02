@@ -15,7 +15,6 @@ class Pessoa {
 
 class Aluno {
   - rg: String
-  - endereco: String
   - curso: String
   + realizarCadastro()
   + trocarMoedas(vantagem: Vantagem)
