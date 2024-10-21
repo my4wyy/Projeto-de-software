@@ -40,7 +40,10 @@ protected void doFilterInternal(HttpServletRequest request, HttpServletResponse 
         String headerName = headerNames.nextElement();
         System.out.println(headerName + ": " + request.getHeader(headerName));
     }
-    
+    if (request.getRequestURI().startsWith("/api/instituicoes")) {
+        filterChain.doFilter(request, response);
+        return;
+    }
 
     String authorizationHeader = request.getHeader("Authorization");
     System.out.println("Authorization Header: " + authorizationHeader); 
