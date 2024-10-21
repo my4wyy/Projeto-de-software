@@ -1,10 +1,11 @@
 package br.com.demo.regescweb.dao;
 
 import br.com.demo.regescweb.models.Aluno;
+import br.com.demo.regescweb.models.Instituicao;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
-
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -17,8 +18,23 @@ public class AlunoDAO {
 
     @Transactional
     public void salvar(Aluno aluno) {
-        entityManager.persist(aluno);
+    Instituicao instituicao = entityManager.find(Instituicao.class, aluno.getInstituicao().getId());
+    if (aluno.getInstituicao() == null || aluno.getInstituicao().getId() == null) {
+        throw new IllegalArgumentException("Instituição não está definida no aluno.");
     }
+    
+    
+    if (instituicao != null) {
+        aluno.setInstituicao(instituicao);
+    } else {
+        throw new IllegalArgumentException("Instituição não encontrada com o ID: " + aluno.getInstituicao().getId());
+    }
+
+    entityManager.persist(aluno);
+}
+
+
+
 
     @Transactional
     public void atualizar(Aluno aluno) {
