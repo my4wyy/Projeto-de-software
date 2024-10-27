@@ -26,11 +26,21 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         http.csrf().disable()
         .cors().and()
             .authorizeRequests(authorize -> authorize
+            .antMatchers(HttpMethod.POST, "/api/alunos/**").permitAll()
+            .antMatchers(HttpMethod.POST, "/api/empresas-parceiras/**").permitAll()
+            
+            .antMatchers(HttpMethod.GET, "/api/alunos/**").hasRole("ALUNO")
+            .antMatchers(HttpMethod.PUT, "/api/alunos/**").hasRole("ALUNO")
+            .antMatchers(HttpMethod.DELETE, "/api/alunos/**").hasRole("ALUNO")
+            
+            .antMatchers(HttpMethod.GET, "/api/empresas-parceiras/**").hasRole("EMPRESA")
+            .antMatchers(HttpMethod.PUT, "/api/empresas-parceiras/**").hasRole("EMPRESA")
+            .antMatchers(HttpMethod.DELETE, "/api/empresas-parceiras/**").hasRole("EMPRESA")
                 .antMatchers(HttpMethod.POST, "/login").permitAll()
                 .antMatchers(HttpMethod.OPTIONS, "/**").permitAll()
-                .antMatchers("/api/instituicoes/**", "/api/empresas-parceiras/**", "/api/vantagens/**").permitAll() 
+                .antMatchers("/api/instituicoes/**",  "/api/vantagens/**").permitAll() 
                 .antMatchers("/api/test/**", "/auth/**", "/auth/login", 
-                             "/v3/api-docs/**", "/swagger-ui/**", "/webjars/**", "/api/alunos/**", "/api/empresas/**").permitAll()
+                             "/v3/api-docs/**", "/swagger-ui/**", "/webjars/**",  "/api/empresas/**").permitAll()
                 .anyRequest().authenticated()
             )
             .sessionManagement(session -> session
@@ -41,12 +51,17 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
-    protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.inMemoryAuthentication()
-            .withUser("user")
-            .password(passwordEncoder().encode("password"))
-            .roles("USER");
-    }
+protected void configure(AuthenticationManagerBuilder auth) throws Exception {
+    auth.inMemoryAuthentication()
+        .withUser("alunoUser")
+        .password(passwordEncoder().encode("passwordAluno"))
+        .roles("ALUNO")
+        .and()
+        .withUser("empresaUser")
+        .password(passwordEncoder().encode("passwordEmpresa"))
+        .roles("EMPRESA");
+}
+
 
     @Bean
     @Override
@@ -56,6 +71,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // Usar BCrypt para codificação de senhas
+        return new BCryptPasswordEncoder(); 
     }
 }
