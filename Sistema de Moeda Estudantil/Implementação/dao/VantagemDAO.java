@@ -38,4 +38,14 @@ public class VantagemDAO {
     public List<Vantagem> buscarTodas() {
         return entityManager.createQuery("SELECT v FROM Vantagem v", Vantagem.class).getResultList();
     }
+
+    public Vantagem buscarPorDescricao(String descricao) {
+        return entityManager.createQuery("SELECT v FROM Vantagem v WHERE v.descricao = :descricao", Vantagem.class)
+                            .setParameter("descricao", descricao)
+                            .getResultList()
+                            .stream()
+                            .findFirst()
+                            .orElse(null);
+    }
+    
 }

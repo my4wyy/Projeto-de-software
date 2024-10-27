@@ -56,4 +56,13 @@ public class AlunoDAO {
     public List<Aluno> buscarTodos() {
         return entityManager.createQuery("SELECT a FROM Aluno a", Aluno.class).getResultList();
     }
+    public Aluno buscarPorEmail(String email) {
+        String jpql = "SELECT a FROM Aluno a WHERE a.email = :email";
+        List<Aluno> alunos = entityManager.createQuery(jpql, Aluno.class)
+                                          .setParameter("email", email)
+                                          .getResultList();
+        return alunos.isEmpty() ? null : alunos.get(0);
+    }
+    
+    
 }
