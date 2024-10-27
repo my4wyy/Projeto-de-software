@@ -7,18 +7,29 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 public class Vantagem {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     private String descricao;
     private String foto;
     private int custo;
-@ManyToOne
-@JoinColumn(name = "empresa_parceira_id")  // Coluna estrangeira
-private EmpresaParceira empresaParceira;
+    @ManyToOne
+    @JoinColumn(name = "empresa_parceira_id")  
+    @JsonBackReference
+    private EmpresaParceira empresaParceira;
 
 
     public Vantagem() {}

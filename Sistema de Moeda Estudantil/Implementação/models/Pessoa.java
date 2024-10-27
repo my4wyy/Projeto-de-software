@@ -1,6 +1,7 @@
 package br.com.demo.regescweb.models;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -12,8 +13,8 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "pessoa")
-@Inheritance(strategy = InheritanceType.JOINED)  // Definindo a estratégia de herança
-public class Pessoa extends Usuario {
+@Inheritance(strategy = InheritanceType.JOINED)
+public class Pessoa extends Usuario{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -23,7 +24,7 @@ public class Pessoa extends Usuario {
     @OneToOne
     private Conta conta;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER) 
     private Instituicao instituicao;
 
     public Pessoa() {}

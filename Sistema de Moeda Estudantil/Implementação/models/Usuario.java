@@ -1,5 +1,6 @@
 package br.com.demo.regescweb.models;
 
+import javax.persistence.Column;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -13,6 +14,8 @@ public class Usuario {
 
     private String nome;
     private String endereco;
+
+    @Column(unique = true)
     private String email;
     private String senha;
 

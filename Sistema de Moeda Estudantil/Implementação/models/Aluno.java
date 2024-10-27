@@ -24,7 +24,6 @@ public class Aluno extends Pessoa {
         this.curso = curso;
     }
 
-    // Métodos
     public void trocarMoedas(Vantagem vantagem) {
         if (getConta().getSaldo() >= vantagem.getCusto()) {
             getConta().setSaldo(getConta().getSaldo() - vantagem.getCusto());
@@ -37,10 +36,7 @@ public class Aluno extends Pessoa {
         setInstituicao(instituicao);
     }
 
-    // Getters e Setters
-
-
-    // Getters e Setters
+  
     public Long getId() {
         return id;
     }
