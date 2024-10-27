@@ -1,12 +1,16 @@
 package br.com.demo.regescweb.controllers;
 
+import br.com.demo.regescweb.dao.EmpresaParceiraDAO;
 import br.com.demo.regescweb.dao.VantagemDAO;
+import br.com.demo.regescweb.models.EmpresaParceira;
 import br.com.demo.regescweb.models.Vantagem;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import javax.servlet.http.HttpServletResponse;
 
 @RestController
 @RequestMapping("/api/vantagens")
@@ -15,11 +19,26 @@ public class VantagemController {
     @Autowired
     private VantagemDAO vantagemDAO;
 
+    @Autowired
+    private EmpresaParceiraDAO empresaParceiraDAO; 
+
     @PostMapping
-    public ResponseEntity<Vantagem> criarVantagem(@RequestBody Vantagem vantagem) {
-        vantagemDAO.salvar(vantagem);
-        return ResponseEntity.ok(vantagem);
+public ResponseEntity<Vantagem> criarVantagem(@RequestParam Long empresaId, @RequestBody Vantagem vantagem) {
+    EmpresaParceira empresa = empresaParceiraDAO.buscarPorId(empresaId);
+    if (empresa == null) {
+        return ResponseEntity.notFound().build();
     }
+    
+    Vantagem vantagemExistente = vantagemDAO.buscarPorDescricao(vantagem.getDescricao());
+    if (vantagemExistente != null) {
+        return ResponseEntity.status(HttpServletResponse.SC_CONFLICT).build(); // Vantagem já existe
+    }
+
+    vantagem.setEmpresaParceira(empresa);
+    vantagemDAO.salvar(vantagem);
+    return ResponseEntity.ok(vantagem);
+}
+
 
     @PutMapping("/{id}")
     public ResponseEntity<Vantagem> atualizarVantagem(@PathVariable Long id, @RequestBody Vantagem vantagemAtualizada) {
@@ -52,4 +71,5 @@ public class VantagemController {
     public List<Vantagem> listarTodasVantagens() {
         return vantagemDAO.buscarTodas();
     }
+    
 }

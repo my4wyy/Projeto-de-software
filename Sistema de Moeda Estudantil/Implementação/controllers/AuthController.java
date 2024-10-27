@@ -1,6 +1,7 @@
 package br.com.demo.regescweb.controllers;
 
-import br.com.demo.regescweb.models.Usuario;
+import br.com.demo.regescweb.models.Aluno;
+import br.com.demo.regescweb.models.EmpresaParceira;
 import br.com.demo.regescweb.models.LoginRequest;
 import br.com.demo.regescweb.security.JwtUtil;
 import org.springframework.http.ResponseEntity;
@@ -32,20 +33,33 @@ public class AuthController {
         String username = loginRequest.getUsername();
         String password = loginRequest.getPassword();
 
-        // Busca genérica para qualquer tipo de usuário (Aluno ou EmpresaParceira)
-        List<Usuario> usuarios = entityManager.createQuery(
-                "SELECT u FROM Usuario u WHERE u.username = :username AND u.password = :password",
-                Usuario.class)
-                .setParameter("username", username)
-                .setParameter("password", password)
+        // Verificar se é Aluno
+        List<Aluno> alunos = entityManager.createQuery(
+                "SELECT a FROM Aluno a WHERE a.email = :email AND a.senha = :senha", Aluno.class)
+                .setParameter("email", username)
+                .setParameter("senha", password)
                 .getResultList();
 
-        if (!usuarios.isEmpty()) {
-            // Gerar o token JWT
-            String token = jwtUtil.gerarToken(username);
+        if (!alunos.isEmpty()) {
+            // Gerar o token com a role ALUNO
+            String token = jwtUtil.gerarToken(username, "ALUNO");
             return ResponseEntity.ok(token);
         }
 
+        // Verificar se é EmpresaParceira
+        List<EmpresaParceira> empresas = entityManager.createQuery(
+                "SELECT e FROM EmpresaParceira e WHERE e.email = :email AND e.senha = :senha", EmpresaParceira.class)
+                .setParameter("email", username)
+                .setParameter("senha", password)
+                .getResultList();
+
+        if (!empresas.isEmpty()) {
+            // Gerar o token com a role EMPRESA
+            String token = jwtUtil.gerarToken(username, "EMPRESA");
+            return ResponseEntity.ok(token);
+        }
+
+        // Caso nenhum usuário seja encontrado, retornar credenciais inválidas
         return ResponseEntity.status(401).body("Credenciais inválidas");
     }
 }
