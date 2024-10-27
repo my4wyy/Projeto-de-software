@@ -35,7 +35,6 @@ async function renderEmpresa(empresa) {
                     <h5 class="card-title">${empresa.nome}</h5>
                     <p class="card-text">Endereço: ${empresa.endereco}</p>
                     <p class="card-text">Email: ${empresa.email}</p>
-                    <p class="card-text">Senha: ${empresa.senha}</p>
                     <p class="card-text">Vantagens: ${vantagens.map(v => v.descricao).join(', ')}</p>
                     <button class="btn btn-secondary btn-editar" data-id="${empresa.id}" data-bs-toggle="modal" data-bs-target="#modalEmpresa">Editar</button>
                     <button class="btn btn-danger btn-deletar" data-id="${empresa.id}">Deletar</button>
@@ -67,12 +66,40 @@ async function fetchVantagens() {
     }
 }
 
+async function criarVantagem(vantagem) {
+    try {
+        const response = await fetch(`${API_URL}/me/vantagens`, {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(vantagem),
+        });
+
+        if (!response.ok) {
+            const errorData = await response.json();
+            console.error('Erro ao criar vantagem:', errorData);
+            throw new Error(`Erro ao criar vantagem: ${errorData.message || 'Erro desconhecido'}`);
+        }
+
+        alert('Vantagem criada com sucesso!');
+        fetchEmpresaLogada(localStorage.getItem('jwtToken'));
+    } catch (error) {
+        console.error('Erro ao criar vantagem:', error);
+        alert(`Erro ao criar a vantagem. Por favor, tente novamente. Detalhes: ${error.message}`);
+    }
+}
+
 async function saveEmpresa(empresa) {
     const method = empresa.id ? 'PUT' : 'POST';
     const url = empresa.id ? `${API_URL}/${empresa.id}` : API_URL;
 
-    const vantagensUnicas = Array.from(new Set(empresa.vantagens.map(v => v.descricao)))
-        .map(descricao => ({ descricao }));
+    const vantagensCompletas = empresa.vantagens.map(v => ({
+        descricao: v.descricao,
+        custo: parseFloat(v.custo) || 0,
+        foto: v.foto || '' // Correção para garantir que o nome do campo seja "foto"
+    }));
 
     try {
         const response = await fetch(url, {
@@ -87,13 +114,13 @@ async function saveEmpresa(empresa) {
                 endereco: empresa.endereco,
                 email: empresa.email,
                 senha: empresa.senha,
-                vantagens: vantagensUnicas
+                vantagens: vantagensCompletas,
             }),
         });
 
         if (!response.ok) {
             const errorData = await response.json();
-            console.error('Erro do backend:', errorData);
+            console.error('Erro ao salvar empresa:', errorData);
             throw new Error(`Erro ao salvar empresa: ${errorData.message || 'Erro desconhecido'}`);
         }
 
@@ -111,32 +138,35 @@ async function deleteEmpresa(id) {
             method: 'DELETE',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`,
+                'Content-Type': 'application/json',
             },
         });
 
         if (!response.ok) {
-            throw new Error('Erro ao deletar empresa');
+            throw new Error('Erro ao deletar a empresa');
         }
 
         alert('Empresa deletada com sucesso!');
         window.location.href = 'EmpresaCreate.html';
-        fetchEmpresaLogada(localStorage.getItem('jwtToken'));
     } catch (error) {
         console.error('Erro ao deletar a empresa:', error);
-        alert('Erro ao deletar a empresa. Por favor, tente novamente.');
+        alert('Falha ao deletar a empresa. Por favor, tente novamente.');
     }
 }
+
 
 async function populateFormWithEmpresa(id) {
     try {
         const response = await fetch(`${API_URL}/${id}`, {
+            method: 'GET',
             headers: {
                 'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`,
+                'Content-Type': 'application/json',
             },
         });
 
         if (!response.ok) {
-            throw new Error('Erro ao buscar dados da empresa');
+            throw new Error('Erro ao buscar dados da empresa para edição');
         }
 
         const empresa = await response.json();
@@ -145,17 +175,43 @@ async function populateFormWithEmpresa(id) {
         document.getElementById('empresaNome').value = empresa.nome;
         document.getElementById('empresaEndereco').value = empresa.endereco;
         document.getElementById('empresaEmail').value = empresa.email;
-        document.getElementById('empresaSenha').value = empresa.senha;
-        document.getElementById('empresaVantagens').value = empresa.vantagens.map(v => v.descricao).join(', ');
+        document.getElementById('empresaSenha').value = '';
+        document.getElementById('vantagens-container').innerHTML = empresa.vantagens.map(v => `
+            <div class="vantagem-item mb-3">
+                <input type="text" class="form-control" value="${v.descricao}" required />
+                <input type="number" class="form-control" value="${v.custo}" required />
+                <input type="text" class="form-control" value="${v.foto}" required />
+                <button type="button" class="btn btn-danger btn-remove-vantagem">Remover</button>
+            </div>
+        `).join('') + '<button type="button" class="btn btn-success btn-add-vantagem">Adicionar Vantagem</button>';
     } catch (error) {
-        console.error('Erro ao buscar empresa:', error);
-        alert('Erro ao carregar os dados da empresa. Tente novamente.');
+        console.error('Erro ao carregar dados da empresa para edição:', error);
     }
 }
 
 document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('jwtToken');
     fetchEmpresaLogada(token);
+
+    document.getElementById('vantagens-container').addEventListener('click', (event) => {
+        if (event.target.classList.contains('btn-add-vantagem')) {
+            const vantagemItem = document.createElement('div');
+            vantagemItem.classList.add('vantagem-item', 'mb-3');
+            vantagemItem.innerHTML = `
+                <input type="text" class="form-control" placeholder="Descrição da Vantagem" required>
+                <input type="number" class="form-control" placeholder="Custo da Vantagem" required>
+                <input type="text" class="form-control" placeholder="URL da Foto" required>
+                <button type="button" class="btn btn-danger btn-remove-vantagem">Remover</button>
+            `;
+            document.getElementById('vantagens-container').insertBefore(vantagemItem, event.target);
+        }
+    });
+
+    document.getElementById('vantagens-container').addEventListener('click', (event) => {
+        if (event.target.classList.contains('btn-remove-vantagem')) {
+            event.target.parentElement.remove();
+        }
+    });
 
     document.getElementById('formEmpresa').addEventListener('submit', (event) => {
         event.preventDefault();
@@ -165,7 +221,11 @@ document.addEventListener('DOMContentLoaded', () => {
             endereco: document.getElementById('empresaEndereco').value,
             email: document.getElementById('empresaEmail').value,
             senha: document.getElementById('empresaSenha').value,
-            vantagens: document.getElementById('empresaVantagens').value.split(',').map(v => ({ descricao: v.trim() })),
+            vantagens: Array.from(document.querySelectorAll('.vantagem-item')).map(v => ({
+                descricao: v.children[0].value,
+                custo: v.children[1].value,
+                foto: v.children[2].value, // Corrigido para usar "foto"
+            })),
         };
         saveEmpresa(empresa);
         event.target.reset();
