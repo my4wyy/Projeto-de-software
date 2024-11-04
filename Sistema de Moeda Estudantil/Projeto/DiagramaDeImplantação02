@@ -1,0 +1,31 @@
+@startuml
+node "Usuário" {
+    [Navegador Web] .-> [Interface de Usuário] 
+    [Interface de Usuário]
+}
+
+
+node "Servidor de Aplicações" {
+    [API REST]
+    [API REST] .-> [Gestão de Moedas e Transações] 
+    [API REST] .-> [Cadastro e Autenticação] 
+    [API REST] .-> [Resgate de Vantagens] 
+    [Notificações] 
+}
+
+node "Servidor de Banco de Dados" {
+    database "Banco de Dados" {
+    }
+}
+
+[Interface de Usuário] .-> [API REST]
+[Gestão de Moedas e Transações] ..> [Notificações]
+[Resgate de Vantagens] ..> [Notificações]
+[Gestão de Moedas e Transações] .-> "Banco de Dados" 
+[Cadastro e Autenticação] .-> "Banco de Dados" 
+[Resgate de Vantagens] .-> "Banco de Dados" 
+[Notificações] .-> "Banco de Dados" 
+
+[Usuário] -- [Servidor de Aplicações] : HTTPS
+[Servidor de Aplicações] -- [Servidor de Banco de Dados] : SQL
+@enduml
