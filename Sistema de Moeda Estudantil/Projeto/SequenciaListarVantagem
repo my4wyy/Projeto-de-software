@@ -1,0 +1,10 @@
+@startuml
+actor Aluno as A
+participant "VantagemController" as VC
+participant "VantagemDAO" as VD
+
+A -> VC: listarTodasVantagens()
+VC -> VD: buscarTodas()
+VD --> VC: Lista de vantagens
+VC --> A: Exibe lista de vantagens
+@enduml
