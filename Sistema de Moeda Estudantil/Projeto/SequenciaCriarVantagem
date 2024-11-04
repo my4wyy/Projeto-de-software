@@ -1,0 +1,12 @@
+@startuml
+actor EmpresaParceira as EP
+participant "VantagemController" as VC
+participant "VantagemDAO" as VD
+
+EP -> VC: criarVantagem(empresaId, vantagem)
+VC -> VD: buscarPorDescricao(vantagem.getDescricao())
+VD --> VC: Vantagem Existente (ou null)
+VC -> VD: salvar(vantagem)
+VD --> VC: Confirmação de salvamento
+VC --> EP: Vantagem cadastrada com sucesso
+@enduml
