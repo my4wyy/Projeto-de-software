@@ -2,9 +2,15 @@
 actor Aluno as A
 participant "VantagemController" as VC
 participant "VantagemDAO" as VD
+participant "Página de Vantagens" as PV
+
+note right of A
+    O aluno deve estar logado
+end note
 
 A -> VC: listarTodasVantagens()
 VC -> VD: buscarTodas()
 VD --> VC: Lista de vantagens
-VC --> A: Exibe lista de vantagens
+VC -> PV: Exibir lista de vantagens
+PV --> A: Mostrar lista de vantagens
 @enduml
