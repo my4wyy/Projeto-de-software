@@ -1,12 +1,27 @@
 @startuml
+!define ALOGADO "Empresa deve estar logada"
 actor EmpresaParceira as EP
 participant "VantagemController" as VC
 participant "VantagemDAO" as VD
+participant "EmpresaParceiraDAO" as EPD
+participant "Página de Cadastro da Empresa" as PCE
+participant "Página de Vantagens" as PV
 
-EP -> VC: criarVantagem(empresaId, vantagem)
+note right of VC
+    ALOGADO
+end note
+
+EP -> PCE: Acessar página de cadastro
+PCE -> VC: Enviar dados da empresa
+VC -> EPD: buscarPorId(empresaId)
+EPD --> VC: Empresa Encontrada (ou null)
+
+EP -> PV: Acessar página de vantagens
+PV -> VC: criarVantagem(empresaId, vantagem)
 VC -> VD: buscarPorDescricao(vantagem.getDescricao())
 VD --> VC: Vantagem Existente (ou null)
 VC -> VD: salvar(vantagem)
 VD --> VC: Confirmação de salvamento
-VC --> EP: Vantagem cadastrada com sucesso
+VC --> PV: Vantagem cadastrada com sucesso
+PV -> EP: Atualizar lista de vantagens
 @enduml
