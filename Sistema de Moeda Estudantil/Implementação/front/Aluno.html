@@ -14,19 +14,7 @@
             <h2 class="text-center">Dados do Aluno</h2>
         </div>
 
-        <div class="row mt-4" id="alunos">
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title"></h5>
-                        <p class="card-text"></p>
-                        <p class="card-text"></p>
-                        <button class="btn btn-secondary btn-editar" data-bs-toggle="modal" data-bs-target="#modalAluno">Editar</button>
-                        <button class="btn btn-danger btn-deletar" data-bs-toggle="modal" data-bs-target="#modalConfirmarDeletar" >Deletar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div class="row mt-4" id="alunos"></div>
     </div>
 
     <div class="modal fade" id="modalAluno" tabindex="-1" aria-labelledby="modalAlunoLabel" aria-hidden="true">
@@ -38,49 +26,26 @@
                 </div>
                 <div class="modal-body">
                     <form id="formAluno">
-                        <input type="hidden" id="alunoId" />
-                        <div class="mb-3">
-                            <label for="alunoNome" class="form-label">Nome</label>
-                            <input type="text" class="form-control" id="alunoNome" required />
-                        </div>
-                        <div class="mb-3">
-                            <label for="alunoEndereco" class="form-label">Endereço</label>
-                            <input type="text" class="form-control" id="alunoEndereco" required />
-                        </div>
-                        <div class="mb-3">
-                            <label for="alunoEmail" class="form-label">Email</label>
-                            <input type="email" class="form-control" id="alunoEmail" required />
-                        </div>
-                        <div class="mb-3">
-                            <label for="alunoSenha" class="form-label">Senha</label>
-                            <input type="password" class="form-control" id="alunoSenha" required />
-                        </div>
-                        <div class="mb-3">
-                            <label for="alunoCpf" class="form-label">CPF</label>
-                            <input type="text" class="form-control" id="alunoCpf" required />
-                        </div>
-                        <div class="mb-3">
-                            <label for="alunoRg" class="form-label">RG</label>
-                            <input type="text" class="form-control" id="alunoRg" required />
-                        </div>
-                        <div class="mb-3">
-                            <label for="alunoCurso" class="form-label">Curso</label>
-                            <input type="text" class="form-control" id="alunoCurso" required />
-                        </div>
                         <button type="submit" class="btn btn-primary">Salvar</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-    
+    <div class="text-center my-4">
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalVantagens">Lista de Vantagens</button>
+    </div>
 
-    <div class="modal fade" id="modalConfirmarDeletar" tabindex="-1" aria-labelledby="modalConfirmarDeletarLabel" aria-hidden="true">
+    <!-- Modal para Exibir Vantagens -->
+    <div class="modal fade" id="modalVantagens" tabindex="-1" aria-labelledby="modalVantagensLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalConfirmarDeletarLabel">Confirmar</h5>
+                    <h5 class="modal-title" id="modalVantagensLabel">Lista de Vantagens</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul id="listaVantagens" class="list-group"></ul>
                 </div>
             </div>
         </div>
@@ -88,7 +53,6 @@
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-maskmoney/3.0.2/jquery.maskMoney.min.js"></script>
     <script src="aluno.js"></script>
 </body>
 </html>

@@ -1,5 +1,3 @@
-// aluno.js
-
 const API_URL = 'http://localhost:8080/api/alunos';
 
 async function fetchAlunoLogado(token) {
@@ -117,9 +115,42 @@ async function populateFormWithAluno(id) {
     }
 }
 
+// Função para listar vantagens ao abrir o modal de vantagens
+async function listarVantagens() {
+    try {
+        const response = await fetch('http://localhost:8080/api/vantagens', {
+            headers: {
+                'Authorization': `Bearer ${localStorage.getItem('jwtToken')}`,
+            },
+        });
+
+        if (!response.ok) throw new Error('Erro ao buscar vantagens');
+
+        const vantagens = await response.json();
+        const listaVantagens = document.getElementById('listaVantagens');
+        listaVantagens.innerHTML = '';
+
+        vantagens.forEach((vantagem) => {
+            const item = `
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    ${vantagem.descricao}
+                    <button class="btn btn-primary btn-sm">Adquirir</button>
+                </li>
+            `;
+            listaVantagens.insertAdjacentHTML('beforeend', item);
+        });
+    } catch (error) {
+        console.error('Erro ao buscar vantagens:', error);
+        alert('Erro ao carregar vantagens. Tente novamente.');
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('jwtToken');
     fetchAlunoLogado(token);
+
+    const modalVantagens = document.getElementById('modalVantagens');
+    modalVantagens.addEventListener('show.bs.modal', listarVantagens);
 
     document.getElementById('formAluno').addEventListener('submit', (event) => {
         event.preventDefault();
