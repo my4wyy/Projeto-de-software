@@ -1,0 +1,36 @@
+@startuml
+actor EmpresaParceira as EP
+participant InterfaceDeUsuario as IU
+participant VantagemController as VC
+participant VantagemService as VS
+participant VantagemRepository as VR
+participant BancoDeDados as BD
+
+EP -> IU: Clica em "Criar Vantagem"
+activate EP
+IU -> VC: POST /vantagens (descricao, foto, custo)
+activate IU
+activate VC
+
+VC -> VS: criarVantagem(descricao, foto, custo)
+activate VS
+
+VS -> VR: save(Vantagem)
+activate VR
+VR -> BD: INSERT INTO Vantagem (descricao, foto, custo, empresaParceira)
+activate BD
+BD --> VR: Confirmação de Inserção
+deactivate BD
+VR --> VS: Vantagem Salva
+deactivate VR
+
+VS --> VC: Vantagem Criada com Sucesso
+deactivate VS
+
+VC --> IU: Retorno de Sucesso
+deactivate VC
+
+IU --> EP: Confirmação de Criação
+deactivate IU
+deactivate EP
+@enduml
