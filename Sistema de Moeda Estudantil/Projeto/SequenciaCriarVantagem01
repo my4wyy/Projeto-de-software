@@ -2,35 +2,53 @@
 actor EmpresaParceira as EP
 participant InterfaceDeUsuario as IU
 participant VantagemController as VC
-participant VantagemService as VS
-participant VantagemRepository as VR
+participant EmpresaParceiraDAO as EPD
+participant VantagemDAO as VD
 participant BancoDeDados as BD
+
 
 EP -> IU: Clica em "Criar Vantagem"
 activate EP
-IU -> VC: POST /vantagens (descricao, foto, custo)
+IU -> VC: POST /api/vantagens?empresaId=empresaId (descricao, foto, custo)
 activate IU
 activate VC
 
-VC -> VS: criarVantagem(descricao, foto, custo)
-activate VS
-
-VS -> VR: save(Vantagem)
-activate VR
-VR -> BD: INSERT INTO Vantagem (descricao, foto, custo, empresaParceira)
+VC -> EPD: buscarPorId(empresaId)
+activate EPD
+EPD -> BD: SELECT * FROM EmpresaParceira WHERE id = empresaId
 activate BD
-BD --> VR: Confirmação de Inserção
+BD --> EPD: Retorna EmpresaParceira
 deactivate BD
-VR --> VS: Vantagem Salva
-deactivate VR
+EPD --> VC: EmpresaParceira encontrada
+deactivate EPD
 
-VS --> VC: Vantagem Criada com Sucesso
-deactivate VS
+alt EmpresaParceira existe
+    VC -> VD: buscarPorDescricao(vantagem.descricao)
+    activate VD
+    VD -> BD: SELECT * FROM Vantagem WHERE descricao = vantagem.descricao
+    BD --> VD: Retorna resultado
+    deactivate BD
+    VD --> VC: Retorna VantagemExistente ou null
+    deactivate VD
 
-VC --> IU: Retorno de Sucesso
+    alt VantagemExistente é null
+        VC -> VD: salvar(vantagem)
+        activate VD
+        VD -> BD: INSERT INTO Vantagem (descricao, foto, custo, empresaParceira)
+        BD --> VD: Confirmação de Inserção
+        deactivate BD
+        VD --> VC: Confirmação de Vantagem Salva
+        deactivate VD
+        VC --> IU: Retorno de Sucesso
+    else
+        VC --> IU: Retorna Conflito (409)
+    end
+else
+    VC --> IU: Retorna Not Found (404)
+end
+
 deactivate VC
-
-IU --> EP: Confirmação de Criação
+IU --> EP: Confirmação de Criação ou Mensagem de Erro
 deactivate IU
 deactivate EP
 @enduml
