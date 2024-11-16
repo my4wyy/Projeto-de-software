@@ -1,0 +1,32 @@
+@startuml
+actor Aluno as AL
+participant InterfaceDeUsuario as IU
+participant VantagemController as VC
+participant VantagemDAO as VD
+participant BancoDeDados as BD
+
+
+AL -> IU: Acessa Listagem de Vantagens
+activate AL
+IU -> VC: listarTodasVantagens()
+activate IU
+activate VC
+
+VC -> VD: buscarTodas()
+activate VD
+
+VD -> BD: SELECT * FROM Vantagem
+activate BD
+BD --> VD: Retorna Lista de Vantagens
+deactivate BD
+
+VD --> VC: Lista de Vantagens
+deactivate VD
+
+VC --> IU: Retorna Lista de Vantagens
+deactivate VC
+
+IU --> AL: Exibe Vantagens Disponíveis
+deactivate IU
+deactivate AL
+@enduml
