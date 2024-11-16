@@ -1,0 +1,65 @@
+@startuml
+actor EmpresaParceira as EP
+participant InterfaceDeUsuario as IU
+participant VantagemController as VC
+participant EmpresaParceiraDAO as EPD
+participant VantagemDAO as VD
+participant BancoDeDados as BD
+
+EP -> IU: Clica em "Criar Vantagem"
+activate EP
+IU -> VC: criarVantagem(empresaId, vantagem)
+activate IU
+activate VC
+
+VC -> EPD: buscarPorId(empresaId)
+activate EPD
+EPD -> BD: SELECT * FROM EmpresaParceira WHERE id = empresaId
+activate BD
+BD --> EPD: Retorna EmpresaParceira ou null
+deactivate BD
+EPD --> VC: EmpresaParceira
+deactivate EPD
+
+opt EmpresaParceira é null
+    VC --> IU: Retorna Not Found (404)
+    deactivate VC
+    IU --> EP: Mensagem de Erro
+    deactivate IU
+    deactivate EP
+    return
+end
+
+VC -> VD: buscarPorDescricao(vantagem.descricao)
+activate VD
+VD -> BD: SELECT * FROM Vantagem WHERE descricao = vantagem.descricao
+activate BD
+BD --> VD: Retorna VantagemExistente ou null
+deactivate BD
+VD --> VC: VantagemExistente
+deactivate VD
+
+opt VantagemExistente não é null
+    VC --> IU: Retorna Conflito (409)
+    deactivate VC
+    IU --> EP: Mensagem de Conflito
+    deactivate IU
+    deactivate EP
+    return
+end
+
+VC -> VD: salvar(vantagem)
+activate VD
+VD -> BD: INSERT INTO Vantagem (descricao, foto, custo, empresaParceira)
+activate BD
+BD --> VD: Confirmação de Inserção
+deactivate BD
+VD --> VC: Confirmação de Vantagem Salva
+deactivate VD
+
+VC --> IU: Retorno de Sucesso
+deactivate VC
+IU --> EP: Confirmação de Criação
+deactivate IU
+deactivate EP
+@enduml
