@@ -27,18 +27,18 @@ public class Conta {
     private int saldo;
 
     @OneToMany(fetch = FetchType.EAGER)
-    private List<Transacao> historicoTransacoes;
+    private List<Transacao> historicoCompras;
 
     
 
     public Conta() {
         this.saldo = 0;
-        this.historicoTransacoes = new ArrayList<>();
+        this.historicoCompras = new ArrayList<>();
     }
     
     public Conta(int saldoInicial) {
         this.saldo = saldoInicial;
-        this.historicoTransacoes = new ArrayList<>();
+        this.historicoCompras = new ArrayList<>();
     }
     
 
@@ -48,7 +48,7 @@ public class Conta {
     }
 
     public List<Transacao> consultarExtrato() {
-        return historicoTransacoes;
+        return historicoCompras;
     }
 
     // Getters e Setters
@@ -60,18 +60,18 @@ public class Conta {
         this.saldo = saldo;
     }
 
-    public List<Transacao> getHistoricoTransacoes() {
-        return historicoTransacoes;
+    public List<Transacao> gethistoricoCompras() {
+        return historicoCompras;
     }
 
-    public void setHistoricoTransacoes(List<Transacao> historicoTransacoes) {
-        this.historicoTransacoes = historicoTransacoes;
+    public void sethistoricoCompras(List<Transacao> historicoCompras) {
+        this.historicoCompras = historicoCompras;
     }
     public void adicionarTransacao(Transacao transacao) {
-        if (historicoTransacoes == null) {
-            historicoTransacoes = new ArrayList<>();
+        if (historicoCompras == null) {
+            historicoCompras = new ArrayList<>();
         }
-        historicoTransacoes.add(transacao);
+        historicoCompras.add(transacao);
     }
     
 }

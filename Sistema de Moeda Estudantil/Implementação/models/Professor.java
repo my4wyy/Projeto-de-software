@@ -33,7 +33,6 @@ public class Professor extends Pessoa {
             aluno.getConta().setSaldo(aluno.getConta().getSaldo() + quantidade);
             Transacao transacao = new Transacao(quantidade, motivo, this, aluno);
             transacao.registrarTransacao();
-            aluno.getConta().getHistoricoTransacoes().add(transacao);
         }
     }
 
