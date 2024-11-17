@@ -1,6 +1,7 @@
 package br.com.demo.regescweb.dao;
 
 import br.com.demo.regescweb.models.Aluno;
+import br.com.demo.regescweb.models.Conta;
 import br.com.demo.regescweb.models.Instituicao;
 
 import javax.persistence.EntityManager;
@@ -16,30 +17,42 @@ public class AlunoDAO {
     @PersistenceContext
     private EntityManager entityManager;
 
-    @Transactional
-    public void salvar(Aluno aluno) {
-    Instituicao instituicao = entityManager.find(Instituicao.class, aluno.getInstituicao().getId());
+    public EntityManager getEntityManager() {
+        return entityManager;
+    }
+
+  @Transactional
+public void salvar(Aluno aluno) {
     if (aluno.getInstituicao() == null || aluno.getInstituicao().getId() == null) {
         throw new IllegalArgumentException("Instituição não está definida no aluno.");
     }
-    
-    
+
+    Instituicao instituicao = entityManager.find(Instituicao.class, aluno.getInstituicao().getId());
     if (instituicao != null) {
         aluno.setInstituicao(instituicao);
     } else {
         throw new IllegalArgumentException("Instituição não encontrada com o ID: " + aluno.getInstituicao().getId());
     }
 
-    entityManager.persist(aluno);
+    
+    if (aluno.getConta() == null) {
+        Conta novaConta = new Conta(0); 
+        aluno.setConta(novaConta);
+        entityManager.persist(novaConta); 
+    }
+
+    entityManager.persist(aluno); 
 }
 
 
-
-
-    @Transactional
-    public void atualizar(Aluno aluno) {
-        entityManager.merge(aluno);
+@Transactional
+public void atualizar(Aluno aluno) {
+    if (aluno.getConta() != null) {
+        entityManager.merge(aluno.getConta());
     }
+    entityManager.merge(aluno);
+}
+
 
     @Transactional
     public void deletar(Long id) {
