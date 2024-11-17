@@ -23,7 +23,7 @@ public class VantagemController {
     private EmpresaParceiraDAO empresaParceiraDAO; 
 
     @PostMapping
-public ResponseEntity<Vantagem> criarVantagem(@RequestParam Long empresaId, @RequestBody Vantagem vantagem) {
+    public ResponseEntity<Vantagem> criarVantagem(@RequestParam Long empresaId, @RequestBody Vantagem vantagem) {
     EmpresaParceira empresa = empresaParceiraDAO.buscarPorId(empresaId);
     if (empresa == null) {
         return ResponseEntity.notFound().build();
@@ -71,5 +71,7 @@ public ResponseEntity<Vantagem> criarVantagem(@RequestParam Long empresaId, @Req
     public List<Vantagem> listarTodasVantagens() {
         return vantagemDAO.buscarTodas();
     }
+
+    
     
 }

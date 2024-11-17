@@ -2,7 +2,7 @@ package br.com.demo.regescweb.controllers;
 
 import br.com.demo.regescweb.dao.AlunoDAO;
 import br.com.demo.regescweb.models.Aluno;
-import br.com.demo.regescweb.security.JwtUtil; // Importando JwtUtil
+import br.com.demo.regescweb.security.JwtUtil; 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
@@ -24,7 +24,7 @@ public class AlunoController {
     private AlunoDAO alunoDAO;
 
     @Autowired
-    private JwtUtil jwtUtil; // Injetando JwtUtil
+    private JwtUtil jwtUtil; 
 
     @PostMapping
 public ResponseEntity<Aluno> criarAluno(@RequestBody Aluno aluno) {
@@ -73,21 +73,20 @@ public ResponseEntity<Aluno> criarAluno(@RequestBody Aluno aluno) {
 
     @GetMapping("/me")
     public ResponseEntity<Aluno> buscarAlunoAtual(HttpServletRequest request) {
-        // Extraindo o token JWT do cabeçalho Authorization
+     
         String authorizationHeader = request.getHeader("Authorization");
         if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            String jwt = authorizationHeader.substring(7); // Remove "Bearer "
+            String jwt = authorizationHeader.substring(7); 
             
             try {
-                // Parse o JWT para obter o nome do usuário
                 Claims claims = Jwts.parserBuilder()
-                        .setSigningKey(jwtUtil.getSecretKey()) // Use a chave secreta do JwtUtil
+                        .setSigningKey(jwtUtil.getSecretKey()) 
                         .build()
                         .parseClaimsJws(jwt)
                         .getBody();
-                String email = claims.getSubject(); // Aqui assumimos que o email é o "subject"
+                String email = claims.getSubject(); 
 
-                // Buscando o aluno pelo email
+               
                 Aluno aluno = alunoDAO.buscarPorEmail(email);
                 return aluno != null ? ResponseEntity.ok(aluno) : ResponseEntity.notFound().build();
             } catch (JwtException e) {
@@ -96,4 +95,15 @@ public ResponseEntity<Aluno> criarAluno(@RequestBody Aluno aluno) {
         }
         return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).build(); // Cabeçalho Authorization não presente
     }
+    @GetMapping("/{id}/conta/saldo")
+    public ResponseEntity<Integer> consultarSaldoPorAlunoId(@PathVariable Long id) {
+        Aluno aluno = alunoDAO.buscarPorId(id);
+        if (aluno == null || aluno.getConta() == null) {
+            return ResponseEntity.notFound().build();
+        }
+        int saldo = aluno.getConta().getSaldo();
+        return ResponseEntity.ok(saldo);
+    }
+    
+    
 }
