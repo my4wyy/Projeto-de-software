@@ -98,7 +98,7 @@ async function saveEmpresa(empresa) {
     const vantagensCompletas = empresa.vantagens.map(v => ({
         descricao: v.descricao,
         custo: parseFloat(v.custo) || 0,
-        foto: v.foto || '' // Correção para garantir que o nome do campo seja "foto"
+        foto: v.foto || '' 
     }));
 
     try {
@@ -176,18 +176,15 @@ async function populateFormWithEmpresa(id) {
         document.getElementById('empresaEndereco').value = empresa.endereco;
         document.getElementById('empresaEmail').value = empresa.email;
         document.getElementById('empresaSenha').value = '';
-        document.getElementById('vantagens-container').innerHTML = empresa.vantagens.map(v => `
-            <div class="vantagem-item mb-3">
-                <input type="text" class="form-control" value="${v.descricao}" required />
-                <input type="number" class="form-control" value="${v.custo}" required />
-                <input type="text" class="form-control" value="${v.foto}" required />
-                <button type="button" class="btn btn-danger btn-remove-vantagem">Remover</button>
-            </div>
-        `).join('') + '<button type="button" class="btn btn-success btn-add-vantagem">Adicionar Vantagem</button>';
+        
+        document.getElementById('vantagens-container').innerHTML = `
+            <button type="button" class="btn btn-success btn-add-vantagem">Adicionar Vantagem</button>
+        `;
     } catch (error) {
         console.error('Erro ao carregar dados da empresa para edição:', error);
     }
 }
+
 
 document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('jwtToken');
@@ -215,24 +212,35 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('formEmpresa').addEventListener('submit', (event) => {
         event.preventDefault();
+        const vantagens = Array.from(document.querySelectorAll('.vantagem-item')).map(v => {
+            const descricao = v.children[0].value;
+            const custo = parseFloat(v.children[1].value);
+            const foto = v.children[2].value;
+    
+            if (custo <= 0) {
+                alert('O custo da vantagem deve ser maior que 0.');
+                throw new Error('Custo inválido');
+            }
+    
+            return { descricao, custo, foto };
+        });
+    
         const empresa = {
             id: document.getElementById('empresaId').value,
             nome: document.getElementById('empresaNome').value,
             endereco: document.getElementById('empresaEndereco').value,
             email: document.getElementById('empresaEmail').value,
             senha: document.getElementById('empresaSenha').value,
-            vantagens: Array.from(document.querySelectorAll('.vantagem-item')).map(v => ({
-                descricao: v.children[0].value,
-                custo: v.children[1].value,
-                foto: v.children[2].value, // Corrigido para usar "foto"
-            })),
+            vantagens: vantagens,
         };
+    
         saveEmpresa(empresa);
         event.target.reset();
-
+    
         const modal = bootstrap.Modal.getInstance(document.getElementById('modalEmpresa'));
         modal.hide();
     });
+    
 
     document.getElementById('empresas').addEventListener('click', (event) => {
         if (event.target.classList.contains('btn-editar')) {

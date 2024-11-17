@@ -32,8 +32,10 @@
             </div>
         </div>
     </div>
+    
     <div class="text-center my-4">
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalVantagens">Lista de Vantagens</button>
+        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalExtrato">Consultar Extrato</button>
     </div>
 
     <div class="modal fade" id="modalVantagens" tabindex="-1" aria-labelledby="modalVantagensLabel" aria-hidden="true">
@@ -45,6 +47,19 @@
                 </div>
                 <div class="modal-body">
                     <ul id="listaVantagens" class="list-group"></ul>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="modalExtrato" tabindex="-1" aria-labelledby="modalExtratoLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalExtratoLabel">Extrato do Aluno</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <ul id="listaExtrato" class="list-group"></ul>
                 </div>
             </div>
         </div>

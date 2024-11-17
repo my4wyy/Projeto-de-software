@@ -1,5 +1,7 @@
 const API_URL = 'http://localhost:8080/api/alunos';
 
+
+
 async function fetchAlunoLogado(token) {
     try {
         const response = await fetch(`${API_URL}/me`, {
@@ -44,6 +46,15 @@ function renderAluno(aluno) {
     `;
     alunosContainer.insertAdjacentHTML('beforeend', alunoCard);
 }
+
+function getToken() {
+    const token = localStorage.getItem('jwtToken');
+    if (!token) {
+        alert('Token não encontrado. Faça login novamente.');
+    }
+    return token;
+}
+
 
 async function saveAluno(aluno) {
     const method = aluno.id ? 'PUT' : 'POST';
@@ -145,9 +156,35 @@ async function listarVantagens() {
     }
 }
 
+async function getAlunoLogadoId() {
+    const token = localStorage.getItem('jwtToken');
+    const response = await fetch(`${API_URL}/me`, {
+        method: 'GET',
+        headers: {
+            'Authorization': `Bearer ${token}`,
+            'Content-Type': 'application/json',
+        },
+    });
+
+    if (!response.ok) {
+        throw new Error('Erro ao buscar dados do aluno');
+    }
+
+    const aluno = await response.json();
+    return aluno.id;
+}
+
+
+
+
+
+
 document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('jwtToken');
     fetchAlunoLogado(token);
+
+    const modalExtrato = document.getElementById('modalExtrato');
+    modalExtrato.addEventListener('show.bs.modal', listarTransacoes);
 
     const modalVantagens = document.getElementById('modalVantagens');
     modalVantagens.addEventListener('show.bs.modal', listarVantagens);
@@ -181,3 +218,100 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+async function consultarSaldoNoExtrato() {
+    const token = getToken();
+    if (!token) {
+        alert('Token de autenticação não encontrado. Faça login novamente.');
+        return;
+    }
+
+    try {
+        const alunoId = await getAlunoLogadoId();
+        const url = `http://localhost:8080/api/alunos/${alunoId}/conta/saldo`;
+
+        const response = await fetch(url, {
+            headers: {
+                'Authorization': `Bearer ${token}`,
+            },
+        });
+
+        if (!response.ok) throw new Error('Erro ao consultar saldo');
+
+        const saldo = await response.json();
+        return saldo;  // Retorna o saldo, para ser usado na renderização das transações
+    } catch (error) {
+        console.error('Erro ao consultar saldo:', error);
+        alert('Erro ao consultar saldo. Tente novamente.');
+    }
+}
+
+// Modifica a renderização das transações para incluir o saldo no final
+async function renderTransacoes(transacoes) {
+    const listaExtrato = document.getElementById('listaExtrato');
+    listaExtrato.innerHTML = ''; // Limpa a lista
+
+    if (transacoes.length === 0) {
+        listaExtrato.innerHTML = '<li class="list-group-item">Nenhuma transação encontrada</li>';
+        return;
+    }
+
+    // Renderiza as transações
+    transacoes.forEach((transacao) => {
+        const item = `
+            <li class="list-group-item">
+                <strong>Motivo:</strong> ${transacao.descricao} <br>
+                <strong>Quantidade:</strong> ${transacao.quantidade} moedas
+            </li>
+        `;
+        listaExtrato.insertAdjacentHTML('beforeend', item);
+    });
+
+    // Obtém o saldo total e adiciona ao final da lista de transações
+    const saldo = await consultarSaldoNoExtrato();
+    const saldoItem = `
+        <li class="list-group-item">
+            <strong>Saldo Total:</strong> ${saldo} Moedas
+        </li>
+    `;
+    listaExtrato.insertAdjacentHTML('beforeend', saldoItem);
+}
+
+// Função para listar transações
+async function listarTransacoes() {
+    const token = getToken();
+    if (!token) {
+        alert('Token de autenticação não encontrado. Faça login novamente.');
+        return;
+    }
+
+    try {
+        // Obtem o ID do professor logado
+        const alunoID = await getAlunoLogadoId();
+
+        // Busca todas as transações
+        const response = await fetch('http://localhost:8080/api/transacoes/listar', {
+            method: 'GET',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Erro ao buscar transações');
+        }
+
+        const transacoes = await response.json();
+
+        // Filtra as transações pelo ID do professor logado (comparando com o ID de origem)
+        const transacoesAluno = transacoes.filter(transacao => transacao.destino && transacao.destino.id === alunoID);
+
+        renderTransacoes(transacoesAluno);
+    } catch (error) {
+        console.error('Erro ao listar transações:', error);
+        alert('Erro ao carregar transações. Tente novamente.');
+    }
+}
+
+
+

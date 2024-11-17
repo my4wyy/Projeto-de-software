@@ -30,6 +30,8 @@ document.getElementById("login-form").addEventListener("submit", async function(
                 window.location.href = "aluno.html";
             } else if (decodedPayload.role === "EMPRESA") {
                 window.location.href = "empresa.html";
+            } else if (decodedPayload.role === "PROFESSOR") {
+                window.location.href = "professor.html";
             } else {
                 alert("Tipo de usuário desconhecido.");
             }
