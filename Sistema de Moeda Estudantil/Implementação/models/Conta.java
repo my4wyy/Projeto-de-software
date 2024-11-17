@@ -2,6 +2,7 @@ package br.com.demo.regescweb.models;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,19 +16,31 @@ public class Conta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     private int saldo;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Transacao> historicoTransacoes = new ArrayList<>();
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<Transacao> historicoTransacoes;
+
     
 
     public Conta() {
         this.saldo = 0;
+        this.historicoTransacoes = new ArrayList<>();
     }
-
+    
     public Conta(int saldoInicial) {
         this.saldo = saldoInicial;
+        this.historicoTransacoes = new ArrayList<>();
     }
+    
 
     // Métodos
     public int consultarSaldo() {
@@ -54,4 +67,11 @@ public class Conta {
     public void setHistoricoTransacoes(List<Transacao> historicoTransacoes) {
         this.historicoTransacoes = historicoTransacoes;
     }
+    public void adicionarTransacao(Transacao transacao) {
+        if (historicoTransacoes == null) {
+            historicoTransacoes = new ArrayList<>();
+        }
+        historicoTransacoes.add(transacao);
+    }
+    
 }

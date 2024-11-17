@@ -35,9 +35,7 @@ public class Transacao {
         this.destino = destino;
     }
 
-    public void registrarTransacao() {
-        // Lógica para registrar a transação
-    }
+   
 
     // Getters e Setters
     public Long getId() {
@@ -67,4 +65,45 @@ public class Transacao {
     public Aluno getDestino() {
         return destino;
     }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setData(Date data) {
+        this.data = data;
+    }
+
+    public void setTipo(String tipo) {
+        this.tipo = tipo;
+    }
+
+    public void setQuantidade(int quantidade) {
+        this.quantidade = quantidade;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public void setOrigem(Professor origem) {
+        this.origem = origem;
+    }
+
+    public void setDestino(Aluno destino) {
+        this.destino = destino;
+    }
+
+    public void registrarTransacao() {
+        if (origem != null && origem.getConta() != null) {
+            origem.getConta().setSaldo(origem.getConta().getSaldo() - quantidade);
+            origem.getConta().adicionarTransacao(this);
+        }
+    
+        if (destino != null && destino.getConta() != null) {
+            destino.getConta().setSaldo(destino.getConta().getSaldo() + quantidade);
+            destino.getConta().adicionarTransacao(this);
+        }
+    }
+    
 }

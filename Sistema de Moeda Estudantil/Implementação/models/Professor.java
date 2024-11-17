@@ -10,16 +10,21 @@ public class Professor extends Pessoa {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
     private String departamento;
-    private int quantidade;
-    private String motivo;
 
     public Professor() {}
 
     public Professor(String nome, String endereco, String email, String senha, String cpf, Conta conta, Instituicao instituicao, String departamento, int quantidade) {
         super(nome, endereco, email, senha, cpf, conta, instituicao);
         this.departamento = departamento;
-        this.quantidade = quantidade;
     }
 
     public void enviarMoedas(Aluno aluno, int quantidade, String motivo) {
@@ -41,19 +46,4 @@ public class Professor extends Pessoa {
         this.departamento = departamento;
     }
 
-    public int getQuantidade() {
-        return quantidade;
-    }
-
-    public void setQuantidade(int quantidade) {
-        this.quantidade = quantidade;
-    }
-
-    public String getMotivo() {
-        return motivo;
-    }
-
-    public void setMotivo(String motivo) {
-        this.motivo = motivo;
-    }
 }

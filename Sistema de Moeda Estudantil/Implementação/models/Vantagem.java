@@ -8,6 +8,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 public class Vantagem {
@@ -24,7 +25,11 @@ public class Vantagem {
     }
 
     private String descricao;
+
+    @JsonProperty("foto")
     private String foto;
+    
+    @JsonProperty("custo")
     private int custo;
     @ManyToOne
     @JoinColumn(name = "empresa_parceira_id")  
