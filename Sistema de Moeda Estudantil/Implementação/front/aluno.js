@@ -126,7 +126,6 @@ async function populateFormWithAluno(id) {
     }
 }
 
-// Função para listar vantagens ao abrir o modal de vantagens
 async function listarVantagens() {
     try {
         const response = await fetch('http://localhost:8080/api/vantagens', {
@@ -144,7 +143,10 @@ async function listarVantagens() {
         vantagens.forEach((vantagem) => {
             const item = `
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    ${vantagem.descricao}
+                    <div>
+                        <img src="${vantagem.foto}" alt="Imagem da Vantagem" class="img-thumbnail me-3" style="width: 50px; height: 50px;">
+                        ${vantagem.descricao}
+                    </div>
                     <button class="btn btn-primary btn-sm">Adquirir</button>
                 </li>
             `;
@@ -155,6 +157,7 @@ async function listarVantagens() {
         alert('Erro ao carregar vantagens. Tente novamente.');
     }
 }
+
 
 async function getAlunoLogadoId() {
     const token = localStorage.getItem('jwtToken');
