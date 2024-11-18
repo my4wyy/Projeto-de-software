@@ -214,8 +214,16 @@ async function renderTransacoes(transacoes) {
         const aluno = destino ? await buscarAlunoPorId(destino.id) : null;
         const alunoNome = aluno ? aluno.nome : 'Aluno não encontrado';
 
+        const dataTransacao = new Date(transacao.data);
+        const dataFormatada = dataTransacao.toLocaleDateString('pt-BR');
+        const horarioFormatado = dataTransacao.toLocaleTimeString('pt-BR', {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
         const item = `
             <li class="list-group-item">
+                <strong>Data:</strong> ${dataFormatada} ${horarioFormatado} <br>
                 <strong>Aluno:</strong> ${alunoNome} <br>
                 <strong>Motivo:</strong> ${transacao.descricao} <br>
                 <strong>Quantidade:</strong> ${transacao.quantidade} moedas
@@ -232,6 +240,8 @@ async function renderTransacoes(transacoes) {
     `;
     listaExtrato.insertAdjacentHTML('beforeend', saldoItem);
 }
+
+
 
 async function listarTransacoes() {
     const token = getToken();

@@ -238,35 +238,68 @@ async function consultarSaldoNoExtrato() {
         if (!response.ok) throw new Error('Erro ao consultar saldo');
 
         const saldo = await response.json();
-        return saldo;  // Retorna o saldo, para ser usado na renderização das transações
+        return saldo; 
     } catch (error) {
         console.error('Erro ao consultar saldo:', error);
         alert('Erro ao consultar saldo. Tente novamente.');
     }
 }
 
-// Modifica a renderização das transações para incluir o saldo no final
+async function buscarProfessorPorId(id) {
+    console.log('ID recebido em buscarProfessorPorId:', id); 
+
+    if (!id || typeof id !== 'string' && typeof id !== 'number') {
+        console.error('ID inválido:', id);
+        return null;
+    }
+
+    try {
+        const response = await fetch(`http://localhost:8080/api/professores/${id}`);
+        if (!response.ok) {
+            throw new Error('Erro ao buscar professor');
+        }
+        return await response.json();
+    } catch (error) {
+        console.error('Erro ao buscar professor:', error);
+        return null;
+    }
+}
+
+
 async function renderTransacoes(transacoes) {
     const listaExtrato = document.getElementById('listaExtrato');
-    listaExtrato.innerHTML = ''; // Limpa a lista
+    listaExtrato.innerHTML = '';
 
     if (transacoes.length === 0) {
         listaExtrato.innerHTML = '<li class="list-group-item">Nenhuma transação encontrada</li>';
         return;
     }
+    
 
-    // Renderiza as transações
-    transacoes.forEach((transacao) => {
+    for (const transacao of transacoes) {
+        const origem = transacao.origem.id;
+        console.log('Origem da transação:', origem);
+        const professor = origem ? await buscarProfessorPorId(origem) : null;
+        const professorNome = professor ? professor.nome : 'Professor não encontrado';
+
+        const dataTransacao = new Date(transacao.data);
+        const dataFormatada = dataTransacao.toLocaleDateString('pt-BR');
+        const horarioFormatado = dataTransacao.toLocaleTimeString('pt-BR', {
+            hour: '2-digit',
+            minute: '2-digit'
+        });
+
         const item = `
             <li class="list-group-item">
+                <strong>Data:</strong> ${dataFormatada} ${horarioFormatado} <br>
+                <strong>Professor:</strong> ${professorNome} <br>
                 <strong>Motivo:</strong> ${transacao.descricao} <br>
                 <strong>Quantidade:</strong> ${transacao.quantidade} moedas
             </li>
         `;
         listaExtrato.insertAdjacentHTML('beforeend', item);
-    });
+    }
 
-    // Obtém o saldo total e adiciona ao final da lista de transações
     const saldo = await consultarSaldoNoExtrato();
     const saldoItem = `
         <li class="list-group-item">
@@ -276,7 +309,7 @@ async function renderTransacoes(transacoes) {
     listaExtrato.insertAdjacentHTML('beforeend', saldoItem);
 }
 
-// Função para listar transações
+
 async function listarTransacoes() {
     const token = getToken();
     if (!token) {
@@ -285,10 +318,8 @@ async function listarTransacoes() {
     }
 
     try {
-        // Obtem o ID do professor logado
         const alunoID = await getAlunoLogadoId();
 
-        // Busca todas as transações
         const response = await fetch('http://localhost:8080/api/transacoes/listar', {
             method: 'GET',
             headers: {
@@ -302,8 +333,8 @@ async function listarTransacoes() {
         }
 
         const transacoes = await response.json();
+        console.log('Transações recebidas:', transacoes); 
 
-        // Filtra as transações pelo ID do professor logado (comparando com o ID de origem)
         const transacoesAluno = transacoes.filter(transacao => transacao.destino && transacao.destino.id === alunoID);
 
         renderTransacoes(transacoesAluno);
