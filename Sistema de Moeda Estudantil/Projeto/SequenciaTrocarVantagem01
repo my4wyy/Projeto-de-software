@@ -1,0 +1,65 @@
+@startuml
+actor Aluno as AL
+participant InterfaceDeUsuario as IU
+participant VantagemController as VC
+participant VantagemDAO as VD
+participant EmpresaParceiraDAO as EPD
+participant BancoDeDados as BD
+
+AL -> IU: Clica em "Trocar Vantagem"
+activate AL
+IU -> VC: atualizarVantagem(id, vantagemAtualizada)
+activate IU
+activate VC
+
+VC -> VD: buscarPorId(id)
+activate VD
+VD -> BD: SELECT * FROM Vantagem WHERE id = id
+activate BD
+BD --> VD: Retorna Vantagem ou null
+deactivate BD
+VD --> VC: Vantagem
+deactivate VD
+
+opt Vantagem é null
+    VC --> IU: Retorna Not Found (404)
+    deactivate VC
+    IU --> AL: Mensagem de Erro
+    deactivate IU
+    deactivate AL
+    return
+end
+
+VC -> EPD: buscarPorId(empresaParceiraId)
+activate EPD
+EPD -> BD: SELECT * FROM EmpresaParceira WHERE id = empresaParceiraId
+activate BD
+BD --> EPD: Retorna EmpresaParceira ou null
+deactivate BD
+EPD --> VC: EmpresaParceira
+deactivate EPD
+
+opt EmpresaParceira é null
+    VC --> IU: Retorna Not Found (404)
+    deactivate VC
+    IU --> AL: Mensagem de Erro
+    deactivate IU
+    deactivate AL
+    return
+end
+
+VC -> VD: atualizar(vantagemAtualizada)
+activate VD
+VD -> BD: Atualiza os dados da vantagem no banco
+activate BD
+BD --> VD: Confirmação de Atualização
+deactivate BD
+VD --> VC: Confirmação de Vantagem Atualizada
+deactivate VD
+
+VC --> IU: Retorno de Sucesso
+deactivate VC
+IU --> AL: Confirmação da Troca
+deactivate IU
+deactivate AL
+@enduml
