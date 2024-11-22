@@ -114,31 +114,30 @@ public class ProfessorController {
     @PostMapping("/enviar-moedas/{id}")
 @Transactional
 public ResponseEntity<String> enviarMoedas(@PathVariable Long id, @RequestBody MoedaTransacaoRequest request) {
-    // Verifica se o professor existe
+   
     Professor professor = professorDAO.buscarPorId(id);
     if (professor == null) {
         return ResponseEntity.status(HttpServletResponse.SC_NOT_FOUND).body("Professor não encontrado.");
     }
 
-    // Verifica se a conta do professor existe
     if (professor.getConta() == null) {
         return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST).body("Conta do professor não encontrada.");
     }
 
-    // Verifica o saldo do professor
+  
     int saldoAtual = professor.getConta().getSaldo();
     if (saldoAtual < request.getQuantidadeMoedas()) {
         return ResponseEntity.status(HttpServletResponse.SC_BAD_REQUEST)
                              .body("Saldo insuficiente para enviar as moedas.");
     }
 
-    // Verifica se o aluno existe
+
     Aluno aluno = alunoDAO.buscarPorId(request.getAlunoId());
     if (aluno == null || aluno.getConta() == null) {
         return ResponseEntity.status(HttpServletResponse.SC_NOT_FOUND).body("Aluno não encontrado ou conta inválida.");
     }
 
-    // Cria a transação
+  
     Transacao transacao = new Transacao(
         request.getQuantidadeMoedas(),
         "Transferência de moedas do professor " + professor.getNome() + " para o aluno " + aluno.getNome(),
@@ -146,14 +145,14 @@ public ResponseEntity<String> enviarMoedas(@PathVariable Long id, @RequestBody M
         aluno
     );
 
-    // Registra a transação
+
     transacao.registrarTransacao();
 
-    // Salva as alterações no banco
+ 
     professorDAO.atualizar(professor);
     alunoDAO.atualizar(aluno);
 
-    // Retorna resposta de sucesso
+
     return ResponseEntity.ok("Moedas enviadas com sucesso! Saldo do professor: " + professor.getConta().getSaldo());
 }
 

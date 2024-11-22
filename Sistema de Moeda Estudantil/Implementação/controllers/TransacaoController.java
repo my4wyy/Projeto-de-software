@@ -6,11 +6,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import javax.servlet.http.HttpServletRequest;
 import br.com.demo.regescweb.dao.TransacaoDAO;
+import br.com.demo.regescweb.dao.VantagemDAO;
 import br.com.demo.regescweb.dao.ProfessorDAO;
 import br.com.demo.regescweb.dao.AlunoDAO;
 import br.com.demo.regescweb.dao.ContaDAO;
 import br.com.demo.regescweb.models.Transacao;
+import br.com.demo.regescweb.models.Vantagem;
 import br.com.demo.regescweb.models.Professor;
+import br.com.demo.regescweb.models.ResgatarVantagemRequest;
 import br.com.demo.regescweb.models.Aluno;
 import br.com.demo.regescweb.models.Conta;
 
@@ -20,6 +23,9 @@ public class TransacaoController {
 
     @Autowired
     private TransacaoDAO transacaoDAO;
+
+    @Autowired
+    private VantagemDAO vantagemDAO;
 
     @Autowired
     private ProfessorDAO professorDAO;
@@ -40,7 +46,6 @@ public class TransacaoController {
         try {
             System.out.println("Iniciando transferência de moedas...");
 
-            // Obtendo o usuário logado a partir do atributo definido no filtro JWT
             String professorEmail = (String) request.getAttribute("clienteLogado");
             if (professorEmail == null) {
                 System.out.println("Usuário não autenticado.");
@@ -100,4 +105,44 @@ public class TransacaoController {
     public ResponseEntity<?> listarTransacoes() {
         return ResponseEntity.ok(transacaoDAO.buscarTodas());
     }
+
+    @PostMapping("/resgatar-vantagem")
+    public ResponseEntity<?> resgatarVantagem(@RequestBody ResgatarVantagemRequest requestBody) {
+        try {
+            Aluno aluno = alunoDAO.buscarPorId(requestBody.getAlunoId());
+            if (aluno == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Aluno não encontrado.");
+            }
+    
+            Vantagem vantagem = vantagemDAO.buscarPorId(requestBody.getVantagemId());
+            if (vantagem == null) {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Vantagem não encontrada.");
+            }
+    
+            Conta contaAluno = aluno.getConta();
+            if (contaAluno.getSaldo() < vantagem.getCusto()) {
+                return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Saldo insuficiente.");
+            }
+    
+            // Atualizar saldo
+            contaAluno.setSaldo(contaAluno.getSaldo() - vantagem.getCusto());
+            contaDAO.atualizar(contaAluno);
+    
+            // Criar e salvar a transação
+            Transacao transacao = new Transacao(
+                vantagem.getCusto(),
+                "Resgate de vantagem: " + vantagem.getDescricao(),
+                aluno,
+                null
+            );
+    
+            transacaoDAO.salvar(transacao);
+    
+            return ResponseEntity.status(HttpStatus.CREATED).body("Vantagem resgatada com sucesso!");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro interno no servidor.");
+        }
+    }
+    
 }
