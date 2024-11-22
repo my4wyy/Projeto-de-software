@@ -4,6 +4,7 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.util.Date;
 
@@ -19,14 +20,16 @@ public class Transacao {
     private String descricao;
 
     @ManyToOne
-    private Professor origem;
+    @JoinColumn(name = "origem_id")
+    private Pessoa origem;
 
-    @ManyToOne
+    @ManyToOne(optional = true)
     private Aluno destino;
+
 
     public Transacao() {}
 
-    public Transacao(int quantidade, String descricao, Professor origem, Aluno destino) {
+    public Transacao(int quantidade, String descricao, Pessoa origem, Aluno destino) {
         this.data = new Date();
         this.tipo = "Transferência";
         this.quantidade = quantidade;
@@ -34,8 +37,6 @@ public class Transacao {
         this.origem = origem;
         this.destino = destino;
     }
-
-   
 
     // Getters e Setters
     public Long getId() {
@@ -58,7 +59,7 @@ public class Transacao {
         return descricao;
     }
 
-    public Professor getOrigem() {
+    public Pessoa getOrigem() {
         return origem;
     }
 
@@ -86,7 +87,7 @@ public class Transacao {
         this.descricao = descricao;
     }
 
-    public void setOrigem(Professor origem) {
+    public void setOrigem(Pessoa origem) {
         this.origem = origem;
     }
 
@@ -95,15 +96,23 @@ public class Transacao {
     }
 
     public void registrarTransacao() {
-        if (origem != null && origem.getConta() != null) {
-            origem.getConta().setSaldo(origem.getConta().getSaldo() - quantidade);
-            origem.getConta().adicionarTransacao(this);
+        if (origem instanceof Professor) {
+            Professor professorOrigem = (Professor) origem;
+            if (professorOrigem.getConta() != null) {
+                professorOrigem.getConta().setSaldo(professorOrigem.getConta().getSaldo() - quantidade);
+                professorOrigem.getConta().adicionarTransacao(this);
+            }
+        } else if (origem instanceof Aluno) {
+            Aluno alunoOrigem = (Aluno) origem;
+            if (alunoOrigem.getConta() != null) {
+                alunoOrigem.getConta().setSaldo(alunoOrigem.getConta().getSaldo() - quantidade);
+                alunoOrigem.getConta().adicionarTransacao(this);
+            }
         }
-    
+
         if (destino != null && destino.getConta() != null) {
             destino.getConta().setSaldo(destino.getConta().getSaldo() + quantidade);
             destino.getConta().adicionarTransacao(this);
         }
     }
-    
 }
