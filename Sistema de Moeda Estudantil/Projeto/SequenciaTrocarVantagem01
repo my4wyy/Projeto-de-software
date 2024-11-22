@@ -6,10 +6,11 @@ participant VantagemDAO as VD
 participant EmpresaParceiraDAO as EPD
 participant BancoDeDados as BD
 participant AlunoDAO as AD
+participant TransacaoDAO as TD
 
 AL -> IU: Acessa "Trocar Vantagem" 
 activate AL
-IU -> VC: trocarVantagem(vantagemId, alunoId) 
+IU -> VC: resgatarVantagem(vantagemId, alunoId) 
 activate IU
 activate VC
 
@@ -67,14 +68,14 @@ opt Saldo insuficiente
   return
 end
 
-VC -> AD: descontarMoedas(alunoId, custo)
-activate AD
-AD -> BD: UPDATE Aluno SET saldo = saldo - custo WHERE id = alunoId
+VC -> TD: registrarTransacao(alunoId, vantagem)
+activate TD
+TD -> BD: INSERT INTO Transacao (alunoId, vantagemId, valor) 
 activate BD
-BD --> AD: Confirmação de Atualização
+BD --> TD: Confirmação de Inserção
 deactivate BD
-AD --> VC: Confirmação de Moeda Descontada
-deactivate AD
+TD --> VC: Confirmação de Transação Registrada
+deactivate TD
 
 VC -> VD: aplicarVantagem(alunoId, vantagem)
 activate VD
@@ -84,6 +85,15 @@ BD --> VD: Confirmação de Aplicação
 deactivate BD
 VD --> VC: Confirmação de Vantagem Aplicada
 deactivate VD
+
+VC -> AD: atualizarSaldo(alunoId, custo)
+activate AD
+AD -> BD: UPDATE Aluno SET saldo = saldo - custo WHERE id = alunoId
+activate BD
+BD --> AD: Confirmação de Atualização de Saldo
+deactivate BD
+AD --> VC: Confirmação de Saldo Atualizado
+deactivate AD
 
 VC --> IU: Retorna Sucesso
 deactivate VC
