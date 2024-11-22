@@ -38,8 +38,8 @@ function renderAluno(aluno) {
                     <p class="card-text">CPF: ${aluno.cpf}</p>
                     <p class="card-text">RG: ${aluno.rg}</p>
                     <p class="card-text">Curso: ${aluno.curso}</p>
-                    <button class="btn btn-secondary btn-editar" data-id="${aluno.id}" data-bs-toggle="modal" data-bs-target="#modalAluno">Editar</button>
-                    <button class="btn btn-danger btn-deletar" data-id="${aluno.id}">Deletar</button>
+                    <button class="btn btn-primary btn-editar" data-id="${aluno.id}" data-bs-toggle="modal" data-bs-target="#modalAluno"><i class="fas fa-edit"></i></button>
+                    <button class="btn btn-primary btn-deletar" data-id="${aluno.id}"><i class="fas fa-trash-alt"></i></button>
                 </div>
             </div>
         </div>
@@ -145,19 +145,26 @@ async function listarVantagens() {
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     <div>
                         <img src="${vantagem.foto}" alt="Imagem da Vantagem" class="img-thumbnail me-3" style="width: 50px; height: 50px;">
-                        ${vantagem.descricao}
+                        ${vantagem.descricao}<br>
+                        ${vantagem.custo}
                     </div>
-                    <button class="btn btn-primary btn-sm">Adquirir</button>
+                    <button class="btn btn-primary btn-sm btn-resgatar" data-id="${vantagem.id}">Resgatar</button>
                 </li>
             `;
             listaVantagens.insertAdjacentHTML('beforeend', item);
+        });
+
+        document.querySelectorAll('.btn-resgatar').forEach(button => {
+            button.addEventListener('click', async (event) => {
+                const vantagemId = event.target.getAttribute('data-id');
+                await resgatarVantagem(vantagemId);
+            });
         });
     } catch (error) {
         console.error('Erro ao buscar vantagens:', error);
         alert('Erro ao carregar vantagens. Tente novamente.');
     }
 }
-
 
 async function getAlunoLogadoId() {
     const token = localStorage.getItem('jwtToken');
@@ -177,9 +184,36 @@ async function getAlunoLogadoId() {
     return aluno.id;
 }
 
+async function resgatarVantagem(vantagemId) {
+    const alunoId = await getAlunoLogadoId();  
+    const token = getToken();
+    if (!token) {
+        alert('Token não encontrado. Faça login novamente.');
+        return;
+    }
 
+    try {
+        const response = await fetch('http://localhost:8080/api/transacoes/resgatar-vantagem', {
+            method: 'POST',
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ alunoId, vantagemId }),
+        });
 
+        if (!response.ok) {
+            const errorText = await response.text();
+            throw new Error(errorText);
+        }
 
+        const message = await response.text();
+        alert(message);
+    } catch (error) {
+        console.error('Erro ao resgatar vantagem:', error);
+        alert(`Erro: ${error.message}`);
+    }
+}
 
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -277,10 +311,9 @@ async function renderTransacoes(transacoes) {
         listaExtrato.innerHTML = '<li class="list-group-item">Nenhuma transação encontrada</li>';
         return;
     }
-    
 
     for (const transacao of transacoes) {
-        const origem = transacao.origem.id;
+        const origem = transacao.origem?.id;
         console.log('Origem da transação:', origem);
         const professor = origem ? await buscarProfessorPorId(origem) : null;
         const professorNome = professor ? professor.nome : 'Professor não encontrado';
@@ -293,11 +326,13 @@ async function renderTransacoes(transacoes) {
         });
 
         const item = `
-            <li class="list-group-item">
-                <strong>Data:</strong> ${dataFormatada} ${horarioFormatado} <br>
-                <strong>Professor:</strong> ${professorNome} <br>
-                <strong>Motivo:</strong> ${transacao.descricao} <br>
-                <strong>Quantidade:</strong> ${transacao.quantidade} moedas
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>${dataFormatada} às ${horarioFormatado}</strong> <br>
+                    <span>Professor: ${professorNome}</span> <br>
+                    <span>Motivo: ${transacao.descricao}</span>
+                </div>
+                <span class="text-end text-success fw-bold" style="font-size: 1.2rem;">${transacao.quantidade} moedas</span>
             </li>
         `;
         listaExtrato.insertAdjacentHTML('beforeend', item);
@@ -305,11 +340,42 @@ async function renderTransacoes(transacoes) {
 
     const saldo = await consultarSaldoNoExtrato();
     const saldoItem = `
-        <li class="list-group-item">
-            <strong>Saldo Total:</strong> ${saldo} Moedas
+        <li class="list-group-item text-center fw-bold bg-light mt-3">
+            <span style="font-size: 1.5rem;">Saldo Total:</span>
+            <span style="font-size: 1.8rem;" class="text-success">${saldo} Moedas</span>
         </li>
     `;
     listaExtrato.insertAdjacentHTML('beforeend', saldoItem);
+}
+
+async function renderCompras(compras) {
+    const listaVantagensResgatadas = document.getElementById('listaVantagensResgatadas');
+    listaVantagensResgatadas.innerHTML = '';
+
+    if (compras.length === 0) {
+        listaVantagensResgatadas.innerHTML = '<li class="list-group-item">Nenhuma compra encontrada</li>';
+        return;
+    }
+
+    for (const compra of compras) {
+        const dataCompra = new Date(compra.data);
+        const dataFormatada = dataCompra.toLocaleDateString('pt-BR');
+        const horarioFormatado = dataCompra.toLocaleTimeString('pt-BR', {
+            hour: '2-digit',
+            minute: '2-digit',
+        });
+
+        const item = `
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>${dataFormatada} às ${horarioFormatado}</strong><br>
+                    <span>Motivo: ${compra.descricao}</span>
+                </div>
+                <span class="fw-bold text-danger" style="font-size: 1.2rem;">-${compra.quantidade} moedas</span>
+            </li>
+        `;
+        listaVantagensResgatadas.insertAdjacentHTML('beforeend', item);
+    }
 }
 
 
@@ -336,16 +402,23 @@ async function listarTransacoes() {
         }
 
         const transacoes = await response.json();
-        console.log('Transações recebidas:', transacoes); 
+        console.log('Transações recebidas:', transacoes);
 
         const transacoesAluno = transacoes.filter(transacao => transacao.destino && transacao.destino.id === alunoID);
+        const comprasAluno = transacoes.filter(transacao => transacao.origem && transacao.origem.id === alunoID);
 
         renderTransacoes(transacoesAluno);
+        renderCompras(comprasAluno);
     } catch (error) {
         console.error('Erro ao listar transações:', error);
         alert('Erro ao carregar transações. Tente novamente.');
     }
 }
+
+document.getElementById('logoutButton').addEventListener('click', () => {
+    localStorage.removeItem('jwtToken'); 
+    window.location.href = 'index.html'; 
+});
 
 
 

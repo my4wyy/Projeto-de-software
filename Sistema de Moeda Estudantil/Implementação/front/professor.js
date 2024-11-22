@@ -115,7 +115,7 @@ async function listarAlunos() {
             const item = `
                 <li class="list-group-item d-flex justify-content-between align-items-center">
                     ${aluno.nome}
-                    <button class="btn btn-secondary btn-sm" onclick="abrirModalEnviarMoedas(${aluno.id})">Enviar moedas</button>
+                    <button class="btn btn-primary btn-sm" onclick="abrirModalEnviarMoedas(${aluno.id})">Enviar moedas</button>
                 </li>
             `;
             listaAlunos.insertAdjacentHTML('beforeend', item);
@@ -223,7 +223,7 @@ async function renderTransacoes(transacoes) {
 
         const item = `
             <li class="list-group-item">
-                <strong>Data:</strong> ${dataFormatada} ${horarioFormatado} <br>
+                <strong></strong> ${dataFormatada} às ${horarioFormatado} <br>
                 <strong>Aluno:</strong> ${alunoNome} <br>
                 <strong>Motivo:</strong> ${transacao.descricao} <br>
                 <strong>Quantidade:</strong> ${transacao.quantidade} moedas
@@ -278,4 +278,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const modalExtrato = document.getElementById('modalExtrato');
     modalExtrato.addEventListener('show.bs.modal', listarTransacoes);
+});
+document.getElementById('logoutButton').addEventListener('click', () => {
+    localStorage.removeItem('jwtToken'); 
+    window.location.href = 'index.html'; 
 });

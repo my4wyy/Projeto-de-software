@@ -11,7 +11,7 @@
 <body>
     <div class="container my-5">
         <div class="card-name">
-            <h2 class="text-center">Dados do Professor</h2>
+            <h2 class="text-center">Olá, Professor!</h2>
         </div>
         <div class="row mt-4" id="professores"></div>
     </div>
@@ -33,6 +33,7 @@
     <div class="text-center my-4">
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalAlunos">Lista de Alunos</button>
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalExtrato">Consultar Extrato</button>
+        <button class="btn btn-primary" id="logoutButton"> <i class="fas fa-sign-out-alt"></i> Sair </button>
     </div>
 
     <div class="modal fade" id="modalAlunos" tabindex="-1" aria-labelledby="modalAlunosLabel" aria-hidden="true">
@@ -78,7 +79,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalExtratoLabel">Extrato do Professor</h5>
+                    <h5 class="modal-title" id="modalExtratoLabel">Moedas enviadas</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">

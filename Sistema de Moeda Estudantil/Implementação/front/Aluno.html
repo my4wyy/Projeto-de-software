@@ -8,10 +8,13 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="aluno.css">
 </head>
+
 <body>
+    
     <div class="container my-5">
         <div class="card-name">
-            <h2 class="text-center">Dados do Aluno</h2>
+            <h2 class="text-center">Olá, Aluno!</h2>
+            
         </div>
 
         <div class="row mt-4" id="alunos"></div>
@@ -33,9 +36,13 @@
         </div>
     </div>
     
+    
     <div class="text-center my-4">
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalVantagens">Lista de Vantagens</button>
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#modalExtrato">Consultar Extrato</button>
+        <button class="btn btn-primary" id="logoutButton"> <i class="fas fa-sign-out-alt"></i> Sair </button>
+    
+        
     </div>
 
     <div class="modal fade" id="modalVantagens" tabindex="-1" aria-labelledby="modalVantagensLabel" aria-hidden="true">
@@ -52,18 +59,28 @@
         </div>
     </div>
     <div class="modal fade" id="modalExtrato" tabindex="-1" aria-labelledby="modalExtratoLabel" aria-hidden="true">
-        <div class="modal-dialog">
+        <div class="modal-dialog modal-lg"> 
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="modalExtratoLabel">Extrato do Aluno</h5>
+                    <h4 class="modal-title" id="modalExtratoLabel">Extrato do Aluno</h4>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                
                 <div class="modal-body">
-                    <ul id="listaExtrato" class="list-group"></ul>
+                    <h5 class="mb-3">Vantagens Resgatadas</h5>
+                    <div id="listaVantagensResgatadas" class="list-group mb-4">
+                        <p class="text-muted text-center">Nenhuma vantagem resgatada.</p>
+                    </div>
+                    <h5 class="mb-3">Moedas Recebidas</h5>
+                    <ul id="listaExtrato" class="list-group mb-4">
+                    </ul>
+    
+                   
                 </div>
             </div>
         </div>
     </div>
+    
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
