@@ -3,6 +3,7 @@ package br.com.demo.regescweb.dao;
 import br.com.demo.regescweb.models.Transacao;
 import br.com.demo.regescweb.models.Professor;
 import br.com.demo.regescweb.models.Aluno;
+import br.com.demo.regescweb.models.Pessoa;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -19,32 +20,31 @@ public class TransacaoDAO {
 
     @Transactional
     public void salvar(Transacao transacao) {
-        // Verifica a presença de 'origem' (Professor)
         if (transacao.getOrigem() == null || transacao.getOrigem().getId() == null) {
-            throw new IllegalArgumentException("Professor de origem não está definido na transação.");
+            throw new IllegalArgumentException("Origem não está definida na transação.");
         }
-        
-        Professor origem = entityManager.find(Professor.class, transacao.getOrigem().getId());
+    
+        Pessoa origem = entityManager.find(Pessoa.class, transacao.getOrigem().getId());
         if (origem != null) {
             transacao.setOrigem(origem);
         } else {
-            throw new IllegalArgumentException("Professor não encontrado com o ID: " + transacao.getOrigem().getId());
+            throw new IllegalArgumentException("Pessoa de origem não encontrada com o ID: " + transacao.getOrigem().getId());
         }
-
-        // Verifica a presença de 'destino' (Aluno)
-        if (transacao.getDestino() == null || transacao.getDestino().getId() == null) {
-            throw new IllegalArgumentException("Aluno de destino não está definido na transação.");
+    
+        // Permitir que o destino seja nulo
+        if (transacao.getDestino() != null && transacao.getDestino().getId() != null) {
+            Aluno destino = entityManager.find(Aluno.class, transacao.getDestino().getId());
+            if (destino != null) {
+                transacao.setDestino(destino);
+            } else {
+                throw new IllegalArgumentException("Aluno não encontrado com o ID: " + transacao.getDestino().getId());
+            }
         }
-        
-        Aluno destino = entityManager.find(Aluno.class, transacao.getDestino().getId());
-        if (destino != null) {
-            transacao.setDestino(destino);
-        } else {
-            throw new IllegalArgumentException("Aluno não encontrado com o ID: " + transacao.getDestino().getId());
-        }
-
+    
         entityManager.persist(transacao);
     }
+    
+
 
     @Transactional
     public void atualizar(Transacao transacao) {
