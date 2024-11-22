@@ -5,61 +5,89 @@ participant VantagemController as VC
 participant VantagemDAO as VD
 participant EmpresaParceiraDAO as EPD
 participant BancoDeDados as BD
+participant AlunoDAO as AD
 
-AL -> IU: Clica em "Trocar Vantagem"
+AL -> IU: Acessa "Trocar Vantagem" 
 activate AL
-IU -> VC: atualizarVantagem(id, vantagemAtualizada)
+IU -> VC: trocarVantagem(vantagemId, alunoId) 
 activate IU
 activate VC
 
-VC -> VD: buscarPorId(id)
+VC -> VD: buscarPorId(vantagemId)
 activate VD
-VD -> BD: SELECT * FROM Vantagem WHERE id = id
+VD -> BD: SELECT * FROM Vantagem WHERE id = vantagemId
 activate BD
 BD --> VD: Retorna Vantagem ou null
 deactivate BD
 VD --> VC: Vantagem
 deactivate VD
 
-opt Vantagem é null
-    VC --> IU: Retorna Not Found (404)
-    deactivate VC
-    IU --> AL: Mensagem de Erro
-    deactivate IU
-    deactivate AL
-    return
+opt Vantagem não existe
+  VC --> IU: Retorna Not Found (404)
+  deactivate VC
+  IU --> AL: Mensagem de Erro
+  deactivate IU
+  deactivate AL
+  return
 end
 
-VC -> EPD: buscarPorId(empresaParceiraId)
-activate EPD
-EPD -> BD: SELECT * FROM EmpresaParceira WHERE id = empresaParceiraId
+VC -> AD: buscarPorId(alunoId)
+activate AD
+AD -> BD: SELECT * FROM Aluno WHERE id = alunoId
 activate BD
-BD --> EPD: Retorna EmpresaParceira ou null
+BD --> AD: Retorna Aluno ou null
 deactivate BD
-EPD --> VC: EmpresaParceira
-deactivate EPD
+AD --> VC: Aluno
+deactivate AD
 
-opt EmpresaParceira é null
-    VC --> IU: Retorna Not Found (404)
-    deactivate VC
-    IU --> AL: Mensagem de Erro
-    deactivate IU
-    deactivate AL
-    return
+opt Aluno não existe
+  VC --> IU: Retorna Not Found (404)
+  deactivate VC
+  IU --> AL: Mensagem de Erro
+  deactivate IU
+  deactivate AL
+  return
 end
 
-VC -> VD: atualizar(vantagemAtualizada)
+VC -> AD: verificarSaldoMoedas(alunoId) 
+activate AD
+AD -> BD: SELECT saldo FROM Aluno WHERE id = alunoId
+activate BD
+BD --> AD: Retorna saldo
+deactivate BD
+AD --> VC: saldo
+deactivate AD
+
+opt Saldo insuficiente
+  VC --> IU: Retorna Conflito (409)
+  deactivate VC
+  IU --> AL: Mensagem de Saldo Insuficiente
+  deactivate IU
+  deactivate AL
+  return
+end
+
+VC -> AD: descontarMoedas(alunoId, custo)
+activate AD
+AD -> BD: UPDATE Aluno SET saldo = saldo - custo WHERE id = alunoId
+activate BD
+BD --> AD: Confirmação de Atualização
+deactivate BD
+AD --> VC: Confirmação de Moeda Descontada
+deactivate AD
+
+VC -> VD: aplicarVantagem(alunoId, vantagem)
 activate VD
-VD -> BD: Atualiza os dados da vantagem no banco
+VD -> BD: UPDATE Vantagem SET alunoId = alunoId WHERE id = vantagemId
 activate BD
-BD --> VD: Confirmação de Atualização
+BD --> VD: Confirmação de Aplicação
 deactivate BD
-VD --> VC: Confirmação de Vantagem Atualizada
+VD --> VC: Confirmação de Vantagem Aplicada
 deactivate VD
 
-VC --> IU: Retorno de Sucesso
+VC --> IU: Retorna Sucesso
 deactivate VC
-IU --> AL: Confirmação da Troca
+IU --> AL: Confirmação de Troca
 deactivate IU
 deactivate AL
 @enduml
