@@ -143,10 +143,13 @@ async function listarVantagens() {
         vantagens.forEach((vantagem) => {
             const item = `
                 <li class="list-group-item d-flex justify-content-between align-items-center">
-                    <div>
-                        <img src="${vantagem.foto}" alt="Imagem da Vantagem" class="img-thumbnail me-3" style="width: 50px; height: 50px;">
-                        ${vantagem.descricao}<br>
-                        ${vantagem.custo}
+                    <div class="d-flex align-items-center">
+                        <img src="${vantagem.foto}" alt="Imagem da Vantagem" 
+                             class="img-thumbnail me-3" style="width: 60px; height: 60px; object-fit: cover; border-radius: 8px;">
+                        <div>
+                            <p class="mb-1" style="font-size: 1rem; font-weight: bold;">${vantagem.descricao}</p>
+                            <p class="mb-0 text-muted" style="font-size: 0.9rem;">Custo: <strong>${vantagem.custo}</strong> moedas</p>
+                        </div>
                     </div>
                     <button class="btn btn-primary btn-sm btn-resgatar" data-id="${vantagem.id}">Resgatar</button>
                 </li>
@@ -165,6 +168,7 @@ async function listarVantagens() {
         alert('Erro ao carregar vantagens. Tente novamente.');
     }
 }
+
 
 async function getAlunoLogadoId() {
     const token = localStorage.getItem('jwtToken');
@@ -332,7 +336,7 @@ async function renderTransacoes(transacoes) {
                     <span>Professor: ${professorNome}</span> <br>
                     <span>Motivo: ${transacao.descricao}</span>
                 </div>
-                <span class="text-end text-success fw-bold" style="font-size: 1.2rem;">${transacao.quantidade} moedas</span>
+                <span class="text-end text-success fw-bold" style="font-size: 1.2rem;">+${transacao.quantidade} moedas</span>
             </li>
         `;
         listaExtrato.insertAdjacentHTML('beforeend', item);
@@ -369,7 +373,7 @@ async function renderCompras(compras) {
             <li class="list-group-item d-flex justify-content-between align-items-center">
                 <div>
                     <strong>${dataFormatada} às ${horarioFormatado}</strong><br>
-                    <span>Motivo: ${compra.descricao}</span>
+                    <span>${compra.descricao}</span>
                 </div>
                 <span class="fw-bold text-danger" style="font-size: 1.2rem;">-${compra.quantidade} moedas</span>
             </li>

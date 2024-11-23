@@ -205,7 +205,7 @@ async function renderTransacoes(transacoes) {
     listaExtrato.innerHTML = '';
 
     if (transacoes.length === 0) {
-        listaExtrato.innerHTML = '<li class="list-group-item">Nenhuma transação encontrada</li>';
+        listaExtrato.innerHTML = '<li class="list-group-item text-center">Nenhuma transação encontrada</li>';
         return;
     }
 
@@ -218,15 +218,17 @@ async function renderTransacoes(transacoes) {
         const dataFormatada = dataTransacao.toLocaleDateString('pt-BR');
         const horarioFormatado = dataTransacao.toLocaleTimeString('pt-BR', {
             hour: '2-digit',
-            minute: '2-digit'
+            minute: '2-digit',
         });
 
         const item = `
-            <li class="list-group-item">
-                <strong></strong> ${dataFormatada} às ${horarioFormatado} <br>
-                <strong>Aluno:</strong> ${alunoNome} <br>
-                <strong>Motivo:</strong> ${transacao.descricao} <br>
-                <strong>Quantidade:</strong> ${transacao.quantidade} moedas
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <strong>${dataFormatada} às ${horarioFormatado}</strong><br>
+                    <span>Aluno: ${alunoNome}</span><br>
+                    <span>Motivo: ${transacao.descricao}</span>
+                </div>
+                <span class="fw-bold text-danger" style="font-size: 1.2rem;">-${transacao.quantidade} moedas</span>
             </li>
         `;
         listaExtrato.insertAdjacentHTML('beforeend', item);
@@ -234,13 +236,13 @@ async function renderTransacoes(transacoes) {
 
     const saldo = await consultarSaldoNoExtrato();
     const saldoItem = `
-        <li class="list-group-item">
-            <strong>Saldo Total:</strong> ${saldo} Moedas
+        <li class="list-group-item text-center fw-bold bg-light mt-3">
+            <span style="font-size: 1.5rem;">Saldo Total:</span>
+            <span style="font-size: 1.8rem;" class="text-success">${saldo} Moedas</span>
         </li>
     `;
     listaExtrato.insertAdjacentHTML('beforeend', saldoItem);
 }
-
 
 
 async function listarTransacoes() {
@@ -251,7 +253,7 @@ async function listarTransacoes() {
     }
 
     try {
-        const professorId = await getProfessorLogadoId();
+        const professorId = await getProfessorLogadoId(); 
         const response = await fetch('http://localhost:8080/api/transacoes/listar', {
             method: 'GET',
             headers: {
@@ -262,6 +264,7 @@ async function listarTransacoes() {
 
         if (!response.ok) throw new Error('Erro ao buscar transações');
         const transacoes = await response.json();
+
         const transacoesProfessor = transacoes.filter(transacao => transacao.origem && transacao.origem.id === professorId);
         renderTransacoes(transacoesProfessor);
     } catch (error) {
@@ -269,6 +272,7 @@ async function listarTransacoes() {
         alert('Erro ao carregar transações. Tente novamente.');
     }
 }
+
 
 document.addEventListener('DOMContentLoaded', () => {
     fetchProfessorLogado();

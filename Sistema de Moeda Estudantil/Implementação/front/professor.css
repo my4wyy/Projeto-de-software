@@ -40,3 +40,37 @@ body {
     color: white;
 }
 
+#listaExtrato .list-group-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+}
+
+#listaExtrato .list-group-item .text-end {
+    font-size: 1.2rem;
+    margin-left: 20px;
+}
+
+#listaExtrato .list-group-item.text-center {
+    font-size: 1.5rem;
+    border: none;
+    background-color: transparent;
+    margin-top: 20px;
+}
+
+.extrato-item {
+    font-size: 1.2rem;
+}
+
+.extrato-item span {
+    font-weight: bold;
+}
+
+.text-danger, .text-success {
+    font-size: 1.2rem; 
+}
