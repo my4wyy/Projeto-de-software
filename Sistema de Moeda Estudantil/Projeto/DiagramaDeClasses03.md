@@ -67,10 +67,10 @@ class Conta {
   + consultarExtrato(): List<Transacao>
 }
 
-Pessoa <|-left- Aluno
-Pessoa <|-right- Professor
-Usuario <|-up- Pessoa
-Usuario <|-down- EmpresaParceira
+Usuario <|-- Pessoa
+Pessoa <|-- Aluno
+Pessoa <|-- Professor
+Usuario <|-- EmpresaParceira
 
 Pessoa "1..*" -- "1" Instituicao 
 Pessoa "1" -- "1" Conta 
