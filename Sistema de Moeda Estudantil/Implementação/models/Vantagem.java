@@ -9,6 +9,10 @@ import javax.persistence.ManyToOne;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import javax.mail.*;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
+import java.util.Properties;
 
 @Entity
 public class Vantagem {
@@ -31,11 +35,11 @@ public class Vantagem {
     
     @JsonProperty("custo")
     private int custo;
+
     @ManyToOne
     @JoinColumn(name = "empresa_parceira_id")  
     @JsonBackReference
     private EmpresaParceira empresaParceira;
-
 
     public Vantagem() {}
 
@@ -51,14 +55,45 @@ public class Vantagem {
     }
 
     public void enviarEmailCupom(Aluno aluno, String codigo) {
-        // Lógica para enviar email com cupom para o aluno
+        String assunto = "Seu Cupom Está Aqui!";
+        String corpo = "Olá " + aluno.getNome() + ",\n\nSeu código de cupom é: " + codigo + "\n\nAgora, seu saldo total é: " + aluno.getConta().getSaldo() + " moedas.\n\n" +
+        "Atenciosamente,\nEquipe Moeda Estudantil";
+        enviarEmail(aluno.getEmail(), assunto, corpo)
+        ;
+        
     }
 
     public void enviarEmailParceiro(EmpresaParceira parceiro, String codigo) {
-        // Lógica para enviar email para a empresa parceira
+        String assunto = "Uma Vantagem Foi resgatada!";
+        String corpo = "Olá " + parceiro.getNome() + ",\n\nO código do cupom é: " + codigo;
+        enviarEmail(parceiro.getEmail(), assunto, corpo);
     }
 
-    // Getters e Setters
+    private void enviarEmail(String destinatario, String assunto, String corpo) {
+       
+        Properties properties = new Properties();
+        properties.put("mail.smtp.host", "localhost"); 
+        properties.put("mail.smtp.port", "25"); 
+        properties.put("mail.smtp.auth", "false");
+        properties.put("mail.smtp.starttls.enable", "false");
+    
+        Session session = Session.getInstance(properties, null);
+    
+        try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("admMoedaEstudantil@email.com")); 
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
+            message.setSubject(assunto);
+            message.setText(corpo);
+    
+          
+            Transport.send(message);
+            System.out.println("E-mail enviado para: " + destinatario);
+        } catch (MessagingException e) {
+            System.err.println("Falha ao enviar e-mail: " + e.getMessage());
+        }
+    }
+    
     public String getDescricao() {
         return descricao;
     }

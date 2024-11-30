@@ -1,5 +1,8 @@
 package br.com.demo.regescweb.models;
 
+import javax.mail.MessagingException;
+import javax.mail.internet.InternetAddress;
+import javax.mail.internet.MimeMessage;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -7,6 +10,9 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.util.Date;
+import java.util.Properties;
+
+import javax.mail.*;
 
 @Entity
 public class Transacao {
@@ -115,4 +121,36 @@ public class Transacao {
             destino.getConta().adicionarTransacao(this);
         }
     }
+
+    public void enviarEmailAluno(Aluno aluno, Professor professor, int quantidade, String motivo) {
+    String destinatario = aluno.getEmail();
+    String assunto = "Você recebeu moedas!";
+    String corpo = "Olá " + aluno.getNome() + ",\n\n" +
+                   "Você recebeu " + quantidade + " moedas de " + professor.getNome() + ".\n" +
+                   "Motivo: " + motivo + "\n\n" +
+                   "Agora, seu saldo total é: " + aluno.getConta().getSaldo() + " moedas.\n\n" +
+                   "Atenciosamente,\nEquipe Moeda Estudantil";
+
+    Properties properties = new Properties();
+    properties.put("mail.smtp.host", "localhost");
+    properties.put("mail.smtp.port", "25");
+    properties.put("mail.smtp.auth", "false");
+    properties.put("mail.smtp.starttls.enable", "false");
+
+    Session session = Session.getInstance(properties, null);
+
+    try {
+        Message message = new MimeMessage(session);
+        message.setFrom(new InternetAddress("admMoedaEstudantil@email.com"));
+        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
+        message.setSubject(assunto);
+        message.setText(corpo);
+
+        Transport.send(message);
+        System.out.println("E-mail enviado para o aluno: " + destinatario);
+    } catch (MessagingException e) {
+        System.err.println("Falha ao enviar e-mail: " + e.getMessage());
+    }
+}
+
 }
