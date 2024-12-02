@@ -1,19 +1,14 @@
 @startuml
-agent "Aluno" as AL
+actor "Aluno" as AL
 agent "InterfaceDeUsuario" as IU
 agent "VantagemController" as VC
-agent "EmailService" as ES
-agent "EmpresaParceira" as EP
+agent "Vantagem" as V
 
 AL -> IU : 1. resgatarVantagem()
 IU -> VC : 2. enviarResgateVantagem()
-VC -> ES : 3. enviarEmailCupom(aluno, codigo)
-ES -> AL : 4. Recebe e-mail com cupom
-VC -> EP : 5. notificarEmpresaParceira(empresa, codigo)
-ES -> EP : 6. enviarEmailParceiro(empresa, codigo)
+VC -> V: 3. enviarEmailCupom(aluno, codigo)
+V -> V: 5. enviarEmail(destinatario, assunto, corpo)
+V -> AL : 6. Recebe e-mail com cupom
+VC -> V: 4. enviarEmailParceiro(EmpresaParceira, codigo)
 
-AL -> IU : 7. registrarGanhoDeMoedas()
-IU -> VC : 8. enviarRegistroMoedas()
-VC -> ES : 9. enviarEmailGanhoMoedas(aluno, quantidade)
-ES -> AL : 10. Recebe e-mail com notificação
 @enduml
