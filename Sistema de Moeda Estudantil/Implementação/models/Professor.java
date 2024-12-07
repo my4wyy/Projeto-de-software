@@ -1,28 +1,26 @@
 package br.com.demo.regescweb.models;
+
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
+import lombok.*;
+
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Professor extends Pessoa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     private String departamento;
 
-    public Professor() {}
-
-    public Professor(String nome, String endereco, String email, String senha, String cpf, Conta conta, Instituicao instituicao, String departamento, int quantidade) {
+    public Professor(String nome, String endereco, String email, String senha, String cpf, Conta conta,
+            Instituicao instituicao, String departamento) {
         super(nome, endereco, email, senha, cpf, conta, instituicao);
         this.departamento = departamento;
     }
@@ -35,14 +33,4 @@ public class Professor extends Pessoa {
             transacao.registrarTransacao();
         }
     }
-
-    // Getters e Setters
-    public String getDepartamento() {
-        return departamento;
-    }
-
-    public void setDepartamento(String departamento) {
-        this.departamento = departamento;
-    }
-
 }

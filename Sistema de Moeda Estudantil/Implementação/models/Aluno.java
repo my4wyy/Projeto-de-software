@@ -5,9 +5,14 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import lombok.*;
 
 @Entity
 @Table(name = "aluno")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Aluno extends Pessoa {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -16,9 +21,8 @@ public class Aluno extends Pessoa {
     private String rg;
     private String curso;
 
-    public Aluno() {}
-
-    public Aluno(String nome, String endereco, String email, String senha, String cpf, Conta conta, Instituicao instituicao, String rg, String curso) {
+    public Aluno(String nome, String endereco, String email, String senha, String cpf, Conta conta,
+            Instituicao instituicao, String rg, String curso) {
         super(nome, endereco, email, senha, cpf, conta, instituicao);
         this.rg = rg;
         this.curso = curso;
@@ -34,30 +38,5 @@ public class Aluno extends Pessoa {
 
     public void escolherInstituicao(Instituicao instituicao) {
         setInstituicao(instituicao);
-    }
-
-  
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public String getRg() {
-        return rg;
-    }
-
-    public void setRg(String rg) {
-        this.rg = rg;
-    }
-
-    public String getCurso() {
-        return curso;
-    }
-
-    public void setCurso(String curso) {
-        this.curso = curso;
     }
 }

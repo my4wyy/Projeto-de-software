@@ -11,11 +11,16 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import java.util.Date;
 import java.util.Properties;
-
 import javax.mail.*;
+import lombok.*;
 
 @Entity
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Transacao {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -32,72 +37,12 @@ public class Transacao {
     @ManyToOne(optional = true)
     private Aluno destino;
 
-
-    public Transacao() {}
-
     public Transacao(int quantidade, String descricao, Pessoa origem, Aluno destino) {
         this.data = new Date();
         this.tipo = "Transferência";
         this.quantidade = quantidade;
         this.descricao = descricao;
         this.origem = origem;
-        this.destino = destino;
-    }
-
-    // Getters e Setters
-    public Long getId() {
-        return id;
-    }
-
-    public Date getData() {
-        return data;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public int getQuantidade() {
-        return quantidade;
-    }
-
-    public String getDescricao() {
-        return descricao;
-    }
-
-    public Pessoa getOrigem() {
-        return origem;
-    }
-
-    public Aluno getDestino() {
-        return destino;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public void setData(Date data) {
-        this.data = data;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
-    public void setQuantidade(int quantidade) {
-        this.quantidade = quantidade;
-    }
-
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
-    public void setOrigem(Pessoa origem) {
-        this.origem = origem;
-    }
-
-    public void setDestino(Aluno destino) {
         this.destino = destino;
     }
 
@@ -123,34 +68,33 @@ public class Transacao {
     }
 
     public void enviarEmailAluno(Aluno aluno, Professor professor, int quantidade, String motivo) {
-    String destinatario = aluno.getEmail();
-    String assunto = "Você recebeu moedas!";
-    String corpo = "Olá " + aluno.getNome() + ",\n\n" +
-                   "Você recebeu " + quantidade + " moedas de " + professor.getNome() + ".\n" +
-                   "Motivo: " + motivo + "\n\n" +
-                   "Agora, seu saldo total é: " + aluno.getConta().getSaldo() + " moedas.\n\n" +
-                   "Atenciosamente,\nEquipe Moeda Estudantil";
+        String destinatario = aluno.getEmail();
+        String assunto = "Você recebeu moedas!";
+        String corpo = "Olá " + aluno.getNome() + ",\n\n" +
+                "Você recebeu " + quantidade + " moedas de " + professor.getNome() + ".\n" +
+                "Motivo: " + motivo + "\n\n" +
+                "Agora, seu saldo total é: " + aluno.getConta().getSaldo() + " moedas.\n\n" +
+                "Atenciosamente,\nEquipe Moeda Estudantil";
 
-    Properties properties = new Properties();
-    properties.put("mail.smtp.host", "localhost");
-    properties.put("mail.smtp.port", "25");
-    properties.put("mail.smtp.auth", "false");
-    properties.put("mail.smtp.starttls.enable", "false");
+        Properties properties = new Properties();
+        properties.put("mail.smtp.host", "localhost");
+        properties.put("mail.smtp.port", "25");
+        properties.put("mail.smtp.auth", "false");
+        properties.put("mail.smtp.starttls.enable", "false");
 
-    Session session = Session.getInstance(properties, null);
+        Session session = Session.getInstance(properties, null);
 
-    try {
-        Message message = new MimeMessage(session);
-        message.setFrom(new InternetAddress("admMoedaEstudantil@email.com"));
-        message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
-        message.setSubject(assunto);
-        message.setText(corpo);
+        try {
+            Message message = new MimeMessage(session);
+            message.setFrom(new InternetAddress("admMoedaEstudantil@email.com"));
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(destinatario));
+            message.setSubject(assunto);
+            message.setText(corpo);
 
-        Transport.send(message);
-        System.out.println("E-mail enviado para o aluno: " + destinatario);
-    } catch (MessagingException e) {
-        System.err.println("Falha ao enviar e-mail: " + e.getMessage());
+            Transport.send(message);
+            System.out.println("E-mail enviado para o aluno: " + destinatario);
+        } catch (MessagingException e) {
+            System.err.println("Falha ao enviar e-mail: " + e.getMessage());
+        }
     }
-}
-
 }
