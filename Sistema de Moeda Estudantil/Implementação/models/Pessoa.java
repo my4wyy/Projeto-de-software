@@ -11,65 +11,34 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import lombok.*;
+
 @Entity
 @Table(name = "pessoa")
 @Inheritance(strategy = InheritanceType.JOINED)
-public class Pessoa extends Usuario{
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class Pessoa extends Usuario {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     private String cpf;
-    
+
     @OneToOne
     private Conta conta;
 
-    @ManyToOne(fetch = FetchType.EAGER) 
+    @ManyToOne(fetch = FetchType.EAGER)
     private Instituicao instituicao;
 
-    public Pessoa() {}
-
-    public Pessoa(String nome, String endereco, String email, String senha, String cpf, Conta conta, Instituicao instituicao) {
+    public Pessoa(String nome, String endereco, String email, String senha, String cpf, Conta conta,
+            Instituicao instituicao) {
         super(nome, endereco, email, senha);
         this.cpf = cpf;
         this.conta = conta;
-        this.instituicao = instituicao;
-    }
-
-    // Getters e Setters
-
-
-
-    // Getters e Setters
-    public String getCpf() {
-        return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
-    }
-
-    public Conta getConta() {
-        return conta;
-    }
-
-    public void setConta(Conta conta) {
-        this.conta = conta;
-    }
-
-    public Instituicao getInstituicao() {
-        return instituicao;
-    }
-
-    public void setInstituicao(Instituicao instituicao) {
         this.instituicao = instituicao;
     }
 }
