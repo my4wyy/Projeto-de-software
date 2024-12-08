@@ -72,29 +72,16 @@ public ResponseEntity<Aluno> criarAluno(@RequestBody Aluno aluno) {
     }
 
     @GetMapping("/me")
-    public ResponseEntity<Aluno> buscarAlunoAtual(HttpServletRequest request) {
-     
-        String authorizationHeader = request.getHeader("Authorization");
-        if (authorizationHeader != null && authorizationHeader.startsWith("Bearer ")) {
-            String jwt = authorizationHeader.substring(7); 
-            
-            try {
-                Claims claims = Jwts.parserBuilder()
-                        .setSigningKey(jwtUtil.getSecretKey()) 
-                        .build()
-                        .parseClaimsJws(jwt)
-                        .getBody();
-                String email = claims.getSubject(); 
-
-               
-                Aluno aluno = alunoDAO.buscarPorEmail(email);
-                return aluno != null ? ResponseEntity.ok(aluno) : ResponseEntity.notFound().build();
-            } catch (JwtException e) {
-                return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).build(); // Token inválido
-            }
-        }
-        return ResponseEntity.status(HttpServletResponse.SC_UNAUTHORIZED).build(); // Cabeçalho Authorization não presente
+public ResponseEntity<Aluno> buscarAlunoAtual(HttpServletRequest request) {
+    try {
+        String email = jwtUtil.extractEmail(request);
+        Aluno aluno = alunoDAO.buscarPorEmail(email);
+        return aluno != null ? ResponseEntity.ok(aluno) : ResponseEntity.notFound().build();
+    } catch (UnauthorizedException e) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
     }
+}
+
     @GetMapping("/{id}/conta/saldo")
     public ResponseEntity<Integer> consultarSaldoPorAlunoId(@PathVariable Long id) {
         Aluno aluno = alunoDAO.buscarPorId(id);
